@@ -14,6 +14,7 @@ public class Comment extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "comment_id")
     private UUID id;
 
     @Column(name = "title")
@@ -21,5 +22,13 @@ public class Comment extends BaseEntity{
 
     @Column(name = "description")
     private String description;
+
+    @ManyToOne
+    @JoinColumn(name = "task_id")
+    private Task task;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private Users commentedBy;
 
 }

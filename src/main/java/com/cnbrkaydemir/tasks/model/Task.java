@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.util.List;
 import java.util.UUID;
 
 @EqualsAndHashCode(callSuper = false)
@@ -15,6 +16,7 @@ public class Task extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "task_id")
     private UUID id;
 
     @Column(name = "name")
@@ -31,5 +33,19 @@ public class Task extends BaseEntity{
 
     @Column(name = "reason", nullable = true)
     private String reason;
+
+    @ManyToOne
+    @JoinColumn(name = "project_id")
+    private Project project;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private Users assignee;
+
+    @OneToMany(mappedBy = "tasks", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Comment> comments;
+
+    @OneToMany(mappedBy = "tasks", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Attachment> attachments;
 
 }

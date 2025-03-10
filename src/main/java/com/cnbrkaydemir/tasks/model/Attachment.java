@@ -14,6 +14,7 @@ public class Attachment extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "attachment_id")
     private UUID id;
 
     @Column(nullable = false, name = "name")
@@ -24,4 +25,8 @@ public class Attachment extends BaseEntity{
 
     @Enumerated(EnumType.STRING)
     private AttachmentType type;
+
+    @ManyToOne
+    @JoinColumn(name = "task_id")
+    private Task task;
 }

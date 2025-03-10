@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.util.List;
 import java.util.UUID;
 
 @EqualsAndHashCode(callSuper = false)
@@ -32,5 +33,13 @@ public class Users extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private UserRole role;
 
+    @ManyToMany(mappedBy = "teamMembers")
+    private List<Team> teams;
+
+    @OneToMany(mappedBy = "users", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Task> tasks;
+
+    @OneToMany(mappedBy = "users", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Comment> comments;
 
 }
