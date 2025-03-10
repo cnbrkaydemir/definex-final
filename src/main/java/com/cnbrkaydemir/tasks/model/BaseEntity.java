@@ -18,4 +18,6 @@ public class BaseEntity implements Serializable {
     private String modifiedBy;
     @Column(name = "modified_date")
     private Date modifiedDate;
+    @Column(name = "deleted", nullable = false)
+    private boolean deleted = false;
 }
