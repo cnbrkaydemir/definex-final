@@ -20,4 +20,12 @@ public class BaseEntity implements Serializable {
     private Date modifiedDate;
     @Column(name = "deleted", nullable = false)
     private boolean deleted = false;
+    @Column(name = "deleted_at")
+    private Date deleted_at;
+
+    public void safeDelete() {
+        this.deleted = true;
+        this.deleted_at = new Date();
+    }
+
 }
