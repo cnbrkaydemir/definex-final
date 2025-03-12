@@ -41,7 +41,8 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public boolean deleteComment(UUID id) throws CommentNotFoundException {
         Comment comment = commentRepository.findById(id).orElseThrow(()->new CommentNotFoundException(id));
-        commentRepository.delete(comment);
+        comment.setDeleted(true);
+        commentRepository.save(comment);
         return false;
     }
 

@@ -42,8 +42,9 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public boolean deleteProject(UUID id) throws ProjectNotFoundException {
         Project project = projectRepository.findById(id).orElseThrow(() -> new ProjectNotFoundException(id));
-        projectRepository.delete(project);
-        return false;
+        project.setDeleted(true);
+        projectRepository.save(project);
+        return true;
     }
 
     @Override

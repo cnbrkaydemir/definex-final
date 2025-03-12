@@ -49,7 +49,8 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Override
     public boolean deleteDepartment(UUID id) throws DepartmentNotFoundException {
         Department targetDepartment = departmentRepository.findById(id).orElseThrow(() -> new DepartmentNotFoundException(id));
-        departmentRepository.delete(targetDepartment);
+        targetDepartment.setDeleted(true);
+        departmentRepository.save(targetDepartment);
         return true;
     }
 }

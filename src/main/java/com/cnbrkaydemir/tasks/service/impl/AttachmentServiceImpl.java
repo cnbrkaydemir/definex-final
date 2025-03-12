@@ -37,7 +37,8 @@ public class AttachmentServiceImpl implements AttachmentService {
     @Override
     public boolean deleteAttachment(UUID id) throws AttachmentNotFoundException {
         Attachment attachment = attachmentRepository.findById(id).orElseThrow(()->new AttachmentNotFoundException(id));
-        attachmentRepository.delete(attachment);
+        attachment.setDeleted(true);
+        attachmentRepository.save(attachment);
         return true;
     }
 

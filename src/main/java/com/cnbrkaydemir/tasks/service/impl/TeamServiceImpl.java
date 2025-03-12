@@ -49,7 +49,8 @@ public class TeamServiceImpl implements TeamService {
     @Override
     public boolean deleteTeam(UUID id) throws TeamNotFoundException {
         Team team = teamRepository.findById(id).orElseThrow(() -> new TeamNotFoundException(id));
-        teamRepository.delete(team);
+        team.setDeleted(true);
+        teamRepository.save(team);
         return true;
     }
 }

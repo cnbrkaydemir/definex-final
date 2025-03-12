@@ -51,7 +51,8 @@ public class UsersServiceImpl implements UsersService {
     @Override
     public boolean delete(UUID id) throws UserNotFoundException {
         Users targetUser = usersRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
-        usersRepository.delete(targetUser);
+        targetUser.setDeleted(true);
+        usersRepository.save(targetUser);
         return true;
     }
 }
