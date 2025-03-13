@@ -1,9 +1,6 @@
 package com.cnbrkaydemir.tasks.service.impl;
 
-import com.cnbrkaydemir.tasks.dto.CommentDto;
-import com.cnbrkaydemir.tasks.dto.TaskDto;
-import com.cnbrkaydemir.tasks.dto.TeamDto;
-import com.cnbrkaydemir.tasks.dto.UserDto;
+import com.cnbrkaydemir.tasks.dto.*;
 import com.cnbrkaydemir.tasks.exception.notfound.UserNotFoundException;
 import com.cnbrkaydemir.tasks.model.Users;
 import com.cnbrkaydemir.tasks.repository.UsersRepository;
@@ -83,6 +80,15 @@ public class UsersServiceImpl implements UsersService {
         return usersRepository.findActiveCommentsByUserId(targetUser.getId())
                 .stream()
                 .map(comment -> modelMapper.map(comment, CommentDto.class))
+                .toList();
+    }
+
+    @Override
+    public List<ProjectDto> getUserProjects(UUID id) {
+        Users targetUser = usersRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
+        return usersRepository.findActiveProjectsByUserId(targetUser.getId())
+                .stream()
+                .map(project -> modelMapper.map(project, ProjectDto.class))
                 .toList();
     }
 }

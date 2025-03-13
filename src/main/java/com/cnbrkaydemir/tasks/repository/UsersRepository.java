@@ -1,9 +1,6 @@
 package com.cnbrkaydemir.tasks.repository;
 
-import com.cnbrkaydemir.tasks.model.Comment;
-import com.cnbrkaydemir.tasks.model.Task;
-import com.cnbrkaydemir.tasks.model.Team;
-import com.cnbrkaydemir.tasks.model.Users;
+import com.cnbrkaydemir.tasks.model.*;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -25,5 +22,9 @@ public interface UsersRepository extends BaseRepository<Users, UUID> {
     @Query("SELECT c FROM Comment c WHERE c.commentedBy.id = :userId AND " +
             "c.commentedBy.deleted = false AND c.deleted = false")
     List<Comment> findActiveCommentsByUserId(@Param("userId") UUID userId);
+
+    @Query("SELECT p FROM Project p join p.teams t join t.teamMembers m where m.id = :userId AND " +
+            "p.deleted = false ")
+    List<Project> findActiveProjectsByUserId(@Param("userId") UUID userId);
 
 }

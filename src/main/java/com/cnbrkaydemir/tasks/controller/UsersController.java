@@ -1,9 +1,6 @@
 package com.cnbrkaydemir.tasks.controller;
 
-import com.cnbrkaydemir.tasks.dto.CommentDto;
-import com.cnbrkaydemir.tasks.dto.TaskDto;
-import com.cnbrkaydemir.tasks.dto.TeamDto;
-import com.cnbrkaydemir.tasks.dto.UserDto;
+import com.cnbrkaydemir.tasks.dto.*;
 import com.cnbrkaydemir.tasks.model.Users;
 import com.cnbrkaydemir.tasks.service.UsersService;
 import lombok.RequiredArgsConstructor;
@@ -64,5 +61,9 @@ public class UsersController {
         return ResponseEntity.ok(usersService.getUserComments(userId));
     }
 
+    @GetMapping("/v1/{userId}/projects")
+    public ResponseEntity<List<ProjectDto>> getProjects(@PathVariable UUID userId){
+        return ResponseEntity.ok(usersService.getUserProjects(userId));
+    }
 
 }

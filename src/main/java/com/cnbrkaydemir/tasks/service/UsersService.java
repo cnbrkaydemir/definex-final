@@ -1,9 +1,6 @@
 package com.cnbrkaydemir.tasks.service;
 
-import com.cnbrkaydemir.tasks.dto.CommentDto;
-import com.cnbrkaydemir.tasks.dto.TaskDto;
-import com.cnbrkaydemir.tasks.dto.TeamDto;
-import com.cnbrkaydemir.tasks.dto.UserDto;
+import com.cnbrkaydemir.tasks.dto.*;
 import com.cnbrkaydemir.tasks.exception.notfound.UserNotFoundException;
 
 
@@ -19,5 +16,6 @@ public interface UsersService {
     List<TaskDto> getUserTasks(UUID id);
     List<TeamDto> getUserTeams(UUID id);
     List<CommentDto> getUserComments(UUID id);
+    List<ProjectDto> getUserProjects(UUID id);
 
 }
