@@ -1,9 +1,17 @@
 package com.cnbrkaydemir.tasks.service.impl;
 
+import com.cnbrkaydemir.tasks.dto.CreateTaskDto;
+import com.cnbrkaydemir.tasks.dto.ProjectDto;
 import com.cnbrkaydemir.tasks.dto.TaskDto;
+import com.cnbrkaydemir.tasks.dto.UserDto;
+import com.cnbrkaydemir.tasks.exception.notfound.ProjectNotFoundException;
 import com.cnbrkaydemir.tasks.exception.notfound.TaskNotFoundException;
-import com.cnbrkaydemir.tasks.model.Task;
+import com.cnbrkaydemir.tasks.exception.notfound.TeamNotFoundException;
+import com.cnbrkaydemir.tasks.exception.notfound.UserNotFoundException;
+import com.cnbrkaydemir.tasks.model.*;
+import com.cnbrkaydemir.tasks.repository.ProjectRepository;
 import com.cnbrkaydemir.tasks.repository.TaskRepository;
+import com.cnbrkaydemir.tasks.repository.UsersRepository;
 import com.cnbrkaydemir.tasks.service.TaskService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -17,6 +25,10 @@ import java.util.UUID;
 public class TaskServiceImpl implements TaskService {
 
     private final TaskRepository taskRepository;
+
+    private final UsersRepository userRepository;
+
+    private final ProjectRepository projectRepository;
 
     private final ModelMapper modelMapper;
 
@@ -35,8 +47,13 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public TaskDto createTask(TaskDto taskDto) {
-        Task task = modelMapper.map(taskDto, Task.class);
+    public TaskDto createTask(CreateTaskDto taskDto) throws UserNotFoundException, TeamNotFoundException {
+        Users user = userRepository.findById(taskDto.getUserId()).orElseThrow(()-> new UserNotFoundException(taskDto.getUserId()));
+        Project project = projectRepository.findById(taskDto.getProjectId()).orElseThrow(()-> new ProjectNotFoundException(taskDto.getProjectId()));
+
+        Task task = CreateTaskDto.convertToTask(taskDto);
+        task.setProject(project);
+        task.setAssignee(user);
         task.setDeleted(false);
         return modelMapper.map(taskRepository.save(task), TaskDto.class);
     }
@@ -54,5 +71,33 @@ public class TaskServiceImpl implements TaskService {
         Task oldTask = taskRepository.findById(id).orElseThrow(()-> new TaskNotFoundException(id));
         modelMapper.map(task, oldTask);
         return modelMapper.map(taskRepository.save(oldTask), TaskDto.class);
+    }
+
+    @Override
+    public UserDto getTaskAssignee(UUID id) throws TaskNotFoundException {
+        Task task = taskRepository.findById(id).orElseThrow(()-> new TaskNotFoundException(id));
+        Users targetUser = taskRepository.findActiveUserByTaskId(task.getId());
+        return modelMapper.map(targetUser, UserDto.class);
+    }
+
+    @Override
+    public ProjectDto getTaskProject(UUID id) throws TaskNotFoundException {
+        Task task = taskRepository.findById(id).orElseThrow(()-> new TaskNotFoundException(id));
+        Project project = taskRepository.findActiveProjectByTaskId(task.getId());
+        return modelMapper.map(project, ProjectDto.class);
+    }
+
+    @Override
+    public TaskDto updateTaskPriority(UUID id, TaskPriority priority) throws TaskNotFoundException {
+        Task task = taskRepository.findById(id).orElseThrow(()-> new TaskNotFoundException(id));
+        task.setPriority(priority);
+        return modelMapper.map(taskRepository.save(task), TaskDto.class);
+    }
+
+    @Override
+    public TaskDto updateTaskProgress(UUID id, TaskProgress progress) throws TaskNotFoundException {
+        Task task = taskRepository.findById(id).orElseThrow(()-> new TaskNotFoundException(id));
+        task.setProgress(progress);
+        return modelMapper.map(taskRepository.save(task), TaskDto.class);
     }
 }

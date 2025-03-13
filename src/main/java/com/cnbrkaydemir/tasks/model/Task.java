@@ -2,14 +2,16 @@ package com.cnbrkaydemir.tasks.model;
 
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 import java.util.List;
 import java.util.UUID;
 
 @EqualsAndHashCode(callSuper = false)
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity
 @Table(name = "tasks")
 public class Task extends BaseEntity{

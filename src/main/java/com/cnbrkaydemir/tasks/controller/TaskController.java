@@ -1,7 +1,11 @@
 package com.cnbrkaydemir.tasks.controller;
 
+import com.cnbrkaydemir.tasks.dto.CreateTaskDto;
+import com.cnbrkaydemir.tasks.dto.ProjectDto;
 import com.cnbrkaydemir.tasks.dto.TaskDto;
-import com.cnbrkaydemir.tasks.model.Task;
+import com.cnbrkaydemir.tasks.dto.UserDto;
+import com.cnbrkaydemir.tasks.model.TaskPriority;
+import com.cnbrkaydemir.tasks.model.TaskProgress;
 import com.cnbrkaydemir.tasks.service.TaskService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +33,7 @@ public class TaskController {
     }
 
     @PostMapping("/v1")
-    public ResponseEntity<TaskDto> create(@RequestBody TaskDto taskDto){
+    public ResponseEntity<TaskDto> create(@RequestBody CreateTaskDto taskDto){
         return ResponseEntity.created(URI.create("/api/task/v1/"+taskDto.getId()))
                 .body(taskService.createTask(taskDto));
     }
@@ -43,6 +47,26 @@ public class TaskController {
     public ResponseEntity<Void> delete(@PathVariable UUID taskId){
         taskService.deleteTask(taskId);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/v1/{taskId}/assignee")
+    public ResponseEntity<UserDto> assignees(@PathVariable UUID taskId){
+        return ResponseEntity.ok(taskService.getTaskAssignee(taskId));
+    }
+
+    @GetMapping("/v1/{taskId}/project")
+    public ResponseEntity<ProjectDto> project(@PathVariable UUID taskId){
+        return ResponseEntity.ok(taskService.getTaskProject(taskId));
+    }
+
+    @PatchMapping("/v1/{taskId}/progress")
+    public ResponseEntity<TaskDto> progress(@PathVariable UUID taskId, @RequestBody TaskProgress taskProgress){
+        return ResponseEntity.ok(taskService.updateTaskProgress(taskId, taskProgress));
+    }
+
+    @PatchMapping("/v1/{taskId}/priority")
+    public ResponseEntity<TaskDto> priority(@PathVariable UUID taskId, @RequestBody TaskPriority taskPriority){
+        return ResponseEntity.ok(taskService.updateTaskPriority(taskId, taskPriority));
     }
 
 }
