@@ -1,11 +1,13 @@
 package com.cnbrkaydemir.tasks.service.impl;
 
+import com.cnbrkaydemir.tasks.dto.CommentDto;
+import com.cnbrkaydemir.tasks.dto.TaskDto;
+import com.cnbrkaydemir.tasks.dto.TeamDto;
 import com.cnbrkaydemir.tasks.dto.UserDto;
 import com.cnbrkaydemir.tasks.exception.notfound.UserNotFoundException;
 import com.cnbrkaydemir.tasks.model.Users;
 import com.cnbrkaydemir.tasks.repository.UsersRepository;
 import com.cnbrkaydemir.tasks.service.UsersService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -55,5 +57,32 @@ public class UsersServiceImpl implements UsersService {
         targetUser.setDeleted(true);
         usersRepository.save(targetUser);
         return true;
+    }
+
+    @Override
+    public List<TaskDto> getUserTasks(UUID id) {
+        Users targetUser = usersRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
+        return usersRepository.findActiveTasksByUserId(targetUser.getId())
+                .stream()
+                .map(task -> modelMapper.map(task, TaskDto.class))
+                .toList();
+    }
+
+    @Override
+    public List<TeamDto> getUserTeams(UUID id) {
+        Users targetUser = usersRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
+        return usersRepository.findActiveTeamsByUserId(targetUser.getId())
+                .stream()
+                .map(team -> modelMapper.map(team, TeamDto.class))
+                .toList();
+    }
+
+    @Override
+    public List<CommentDto> getUserComments(UUID id) {
+        Users targetUser = usersRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
+        return usersRepository.findActiveCommentsByUserId(targetUser.getId())
+                .stream()
+                .map(comment -> modelMapper.map(comment, CommentDto.class))
+                .toList();
     }
 }

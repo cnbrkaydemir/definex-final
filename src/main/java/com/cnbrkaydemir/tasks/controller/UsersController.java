@@ -1,5 +1,8 @@
 package com.cnbrkaydemir.tasks.controller;
 
+import com.cnbrkaydemir.tasks.dto.CommentDto;
+import com.cnbrkaydemir.tasks.dto.TaskDto;
+import com.cnbrkaydemir.tasks.dto.TeamDto;
 import com.cnbrkaydemir.tasks.dto.UserDto;
 import com.cnbrkaydemir.tasks.model.Users;
 import com.cnbrkaydemir.tasks.service.UsersService;
@@ -46,6 +49,20 @@ public class UsersController {
                 .build();
     }
 
+    @GetMapping("/v1/{userId}/tasks")
+    public ResponseEntity<List<TaskDto>> getTasks(@PathVariable UUID userId){
+        return ResponseEntity.ok(usersService.getUserTasks(userId));
+    }
+
+    @GetMapping("/v1/{userId}/teams")
+    public ResponseEntity<List<TeamDto>> getTeams(@PathVariable UUID userId){
+        return ResponseEntity.ok(usersService.getUserTeams(userId));
+    }
+
+    @GetMapping("/v1/{userId}/comments")
+    public ResponseEntity<List<CommentDto>> getComments(@PathVariable UUID userId){
+        return ResponseEntity.ok(usersService.getUserComments(userId));
+    }
 
 
 }
