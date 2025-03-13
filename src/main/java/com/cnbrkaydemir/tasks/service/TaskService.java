@@ -10,7 +10,7 @@ import java.util.UUID;
 public interface TaskService {
     TaskDto getTask(UUID id) throws TaskNotFoundException;
     List<TaskDto> getTasks();
-    TaskDto createTask(Task task);
+    TaskDto createTask(TaskDto taskDto);
     boolean deleteTask(UUID id) throws TaskNotFoundException;
     TaskDto updateTask(UUID id, TaskDto task) throws TaskNotFoundException;
 }

@@ -11,6 +11,6 @@ public interface AttachmentService {
     AttachmentDto getAttachment(UUID id) throws AttachmentNotFoundException;
     List<AttachmentDto> getAllAttachments();
     boolean deleteAttachment(UUID id) throws AttachmentNotFoundException;
-    AttachmentDto createAttachment(Attachment attachment);
+    AttachmentDto createAttachment(AttachmentDto attachmentDto);
     AttachmentDto updateAttachment(UUID id, AttachmentDto attachment) throws AttachmentNotFoundException;
 }

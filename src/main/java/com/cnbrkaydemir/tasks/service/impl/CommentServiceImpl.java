@@ -21,7 +21,9 @@ public class CommentServiceImpl implements CommentService {
     private final ModelMapper modelMapper;
 
     @Override
-    public CommentDto createComment(Comment comment) {
+    public CommentDto createComment(CommentDto commentDto) {
+        Comment comment = modelMapper.map(commentDto, Comment.class);
+        comment.setDeleted(false);
         return modelMapper.map(commentRepository.save(comment), CommentDto.class);
     }
 

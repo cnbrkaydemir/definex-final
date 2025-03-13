@@ -43,7 +43,9 @@ public class AttachmentServiceImpl implements AttachmentService {
     }
 
     @Override
-    public AttachmentDto createAttachment(Attachment attachment) {
+    public AttachmentDto createAttachment(AttachmentDto attachmentDto) {
+        Attachment attachment = modelMapper.map(attachmentDto, Attachment.class);
+        attachment.setDeleted(false);
         return modelMapper.map(attachmentRepository.save(attachment), AttachmentDto.class);
     }
 

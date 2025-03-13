@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.UUID;
 
 public interface CommentService {
-    CommentDto createComment(Comment comment);
+    CommentDto createComment(CommentDto comment);
     CommentDto getComment(UUID id) throws CommentNotFoundException;
     CommentDto updateComment(UUID id, CommentDto comment) throws CommentNotFoundException;
     boolean deleteComment(UUID id) throws CommentNotFoundException;

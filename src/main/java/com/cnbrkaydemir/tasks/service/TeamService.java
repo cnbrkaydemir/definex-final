@@ -10,7 +10,7 @@ import java.util.UUID;
 public interface TeamService {
     TeamDto getTeamById(UUID id) throws TeamNotFoundException;
     List<TeamDto> getAllTeams();
-    TeamDto createTeam(Team team);
+    TeamDto createTeam(TeamDto teamDto);
     TeamDto updateTeam(UUID id, TeamDto team) throws TeamNotFoundException;
     boolean deleteTeam(UUID id) throws TeamNotFoundException;
 }

@@ -36,9 +36,10 @@ public class UsersServiceImpl implements UsersService {
     }
 
     @Override
-    public UserDto create(Users user) {
-        Users newUser = usersRepository.save(user);
-        return modelMapper.map(newUser, UserDto.class);
+    public UserDto create(UserDto userDto) {
+        Users targetUser = modelMapper.map(userDto, Users.class);
+        targetUser.setDeleted(false);
+        return modelMapper.map(usersRepository.save(targetUser), UserDto.class);
     }
 
     @Override

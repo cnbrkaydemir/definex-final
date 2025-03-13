@@ -10,7 +10,7 @@ import java.util.UUID;
 public interface ProjectService {
     ProjectDto getProject(UUID id) throws ProjectNotFoundException;
     List<ProjectDto> getProjects();
-    ProjectDto saveProject(Project project);
+    ProjectDto createProject(ProjectDto projectDto);
     boolean deleteProject(UUID id) throws ProjectNotFoundException;
     ProjectDto updateProject(UUID id, ProjectDto project) throws ProjectNotFoundException;
 }

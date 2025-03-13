@@ -10,7 +10,7 @@ import java.util.UUID;
 public interface UsersService {
     UserDto get(UUID id) throws UserNotFoundException;
     List<UserDto> getAll();
-    UserDto create(Users user);
+    UserDto create(UserDto userDto);
     UserDto update(UUID id, UserDto user) throws UserNotFoundException;
     boolean delete(UUID id) throws UserNotFoundException;
 }

@@ -10,7 +10,7 @@ import java.util.UUID;
 public interface DepartmentService {
     DepartmentDto getDepartmentById(UUID id) throws DepartmentNotFoundException;
     List<DepartmentDto> getAllDepartments();
-    DepartmentDto createDepartment(Department department);
+    DepartmentDto createDepartment(DepartmentDto departmentDto);
     DepartmentDto updateDepartment(UUID id, DepartmentDto department) throws DepartmentNotFoundException;
     boolean deleteDepartment(UUID id) throws DepartmentNotFoundException;
 }

@@ -35,7 +35,9 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public ProjectDto saveProject(Project project) {
+    public ProjectDto createProject(ProjectDto projectDto) {
+        Project project = modelMapper.map(projectDto, Project.class);
+        project.setDeleted(false);
         return modelMapper.map(projectRepository.save(project), ProjectDto.class);
     }
 

@@ -35,7 +35,9 @@ public class TeamServiceImpl implements TeamService {
     }
 
     @Override
-    public TeamDto createTeam(Team team) {
+    public TeamDto createTeam(TeamDto teamDto) {
+        Team team = modelMapper.map(teamDto, Team.class);
+        team.setDeleted(false);
         return modelMapper.map(teamRepository.save(team), TeamDto.class);
     }
 
