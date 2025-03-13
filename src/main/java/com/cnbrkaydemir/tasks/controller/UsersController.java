@@ -1,7 +1,6 @@
 package com.cnbrkaydemir.tasks.controller;
 
 import com.cnbrkaydemir.tasks.dto.*;
-import com.cnbrkaydemir.tasks.model.Users;
 import com.cnbrkaydemir.tasks.service.UsersService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
