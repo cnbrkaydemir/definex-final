@@ -1,9 +1,6 @@
 package com.cnbrkaydemir.tasks.controller;
 
-import com.cnbrkaydemir.tasks.dto.DepartmentDto;
-import com.cnbrkaydemir.tasks.dto.ProjectDto;
-import com.cnbrkaydemir.tasks.dto.TeamDto;
-import com.cnbrkaydemir.tasks.dto.UserDto;
+import com.cnbrkaydemir.tasks.dto.*;
 import com.cnbrkaydemir.tasks.service.TeamService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -32,7 +29,7 @@ public class TeamController {
     }
 
     @PostMapping("/v1")
-    public ResponseEntity<TeamDto> create(@RequestBody TeamDto teamDto){
+    public ResponseEntity<TeamDto> create(@RequestBody CreateTeamDto teamDto){
         return ResponseEntity.created(URI.create("/api/team/v1/"+teamDto.getId()))
                 .body(teamService.createTeam(teamDto));
     }

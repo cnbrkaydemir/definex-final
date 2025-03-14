@@ -1,6 +1,8 @@
 package com.cnbrkaydemir.tasks.controller;
 
 import com.cnbrkaydemir.tasks.dto.DepartmentDto;
+import com.cnbrkaydemir.tasks.dto.ProjectDto;
+import com.cnbrkaydemir.tasks.dto.TeamDto;
 import com.cnbrkaydemir.tasks.model.Department;
 import com.cnbrkaydemir.tasks.service.DepartmentService;
 import lombok.RequiredArgsConstructor;
@@ -45,7 +47,33 @@ public class DepartmentController {
         return ResponseEntity.noContent().build();
     }
 
+    @GetMapping("/v1/{departmentId}/teams")
+    public ResponseEntity<List<TeamDto>> getTeams(@PathVariable UUID departmentId){
+        return ResponseEntity.ok(departmentService.getTeamsByDepartment(departmentId));
+    }
 
+    @GetMapping("/v1/{departmentId}/projects")
+    public ResponseEntity<List<ProjectDto>> getProjects(@PathVariable UUID departmentId){
+        return ResponseEntity.ok(departmentService.getProjectsByDepartment(departmentId));
+    }
 
+    @PostMapping("/v1/{departmentId}/team/{teamId}/add")
+    public ResponseEntity<TeamDto> addTeam(@PathVariable UUID departmentId, @PathVariable UUID teamId){
+        return ResponseEntity.ok(departmentService.addTeam(departmentId, teamId));
+    }
 
+    @PostMapping("/v1/{departmentId}/team/{teamId}/discard")
+    public ResponseEntity<TeamDto> discardTeam(@PathVariable UUID departmentId, @PathVariable UUID teamId){
+        return ResponseEntity.ok(departmentService.discardTeam(departmentId, teamId));
+    }
+
+    @PostMapping("/v1/{departmentId}/project/{projectId}/add")
+    public ResponseEntity<ProjectDto> addProject(@PathVariable UUID departmentId, @PathVariable UUID projectId){
+        return ResponseEntity.ok(departmentService.addProject(departmentId, projectId));
+    }
+
+    @PostMapping("/v1/{departmentId}/project/{projectId}/discard")
+    public ResponseEntity<ProjectDto> discardProject(@PathVariable UUID departmentId, @PathVariable UUID projectId){
+        return ResponseEntity.ok(departmentService.discardProject(departmentId, projectId));
+    }
 }

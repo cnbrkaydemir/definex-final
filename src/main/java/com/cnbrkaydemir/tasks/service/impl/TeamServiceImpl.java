@@ -1,9 +1,7 @@
 package com.cnbrkaydemir.tasks.service.impl;
 
-import com.cnbrkaydemir.tasks.dto.DepartmentDto;
-import com.cnbrkaydemir.tasks.dto.ProjectDto;
-import com.cnbrkaydemir.tasks.dto.TeamDto;
-import com.cnbrkaydemir.tasks.dto.UserDto;
+import com.cnbrkaydemir.tasks.dto.*;
+import com.cnbrkaydemir.tasks.exception.notfound.DepartmentNotFoundException;
 import com.cnbrkaydemir.tasks.exception.notfound.TeamNotFoundException;
 import com.cnbrkaydemir.tasks.exception.notfound.UserNotFoundException;
 import com.cnbrkaydemir.tasks.exception.state.UserAlreadyInTeamException;
@@ -11,6 +9,7 @@ import com.cnbrkaydemir.tasks.model.Department;
 import com.cnbrkaydemir.tasks.model.Project;
 import com.cnbrkaydemir.tasks.model.Team;
 import com.cnbrkaydemir.tasks.model.Users;
+import com.cnbrkaydemir.tasks.repository.DepartmentRepository;
 import com.cnbrkaydemir.tasks.repository.TeamRepository;
 import com.cnbrkaydemir.tasks.repository.UsersRepository;
 import com.cnbrkaydemir.tasks.service.TeamService;
@@ -29,6 +28,8 @@ public class TeamServiceImpl implements TeamService {
 
     private final UsersRepository usersRepository;
 
+    private final DepartmentRepository departmentRepository;
+
     private final ModelMapper modelMapper;
 
     @Override
@@ -46,8 +47,10 @@ public class TeamServiceImpl implements TeamService {
     }
 
     @Override
-    public TeamDto createTeam(TeamDto teamDto) {
+    public TeamDto createTeam(CreateTeamDto teamDto) {
+        Department department = departmentRepository.findById(teamDto.getDepartment()).orElseThrow(() -> new DepartmentNotFoundException(teamDto.getDepartment()));
         Team team = modelMapper.map(teamDto, Team.class);
+        department.getTeams().add(team);
         team.setDeleted(false);
         return modelMapper.map(teamRepository.save(team), TeamDto.class);
     }
