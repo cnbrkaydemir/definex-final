@@ -1,9 +1,6 @@
 package com.cnbrkaydemir.tasks.controller;
 
-import com.cnbrkaydemir.tasks.dto.CreateTaskDto;
-import com.cnbrkaydemir.tasks.dto.ProjectDto;
-import com.cnbrkaydemir.tasks.dto.TaskDto;
-import com.cnbrkaydemir.tasks.dto.UserDto;
+import com.cnbrkaydemir.tasks.dto.*;
 import com.cnbrkaydemir.tasks.model.TaskPriority;
 import com.cnbrkaydemir.tasks.model.TaskProgress;
 import com.cnbrkaydemir.tasks.service.TaskService;
@@ -69,4 +66,13 @@ public class TaskController {
         return ResponseEntity.ok(taskService.updateTaskPriority(taskId, taskPriority));
     }
 
+    @GetMapping("/v1/{taskId}/comments")
+    public ResponseEntity<List<CommentDto>> comments(@PathVariable UUID taskId){
+        return ResponseEntity.ok(taskService.getTaskComments(taskId));
+    }
+
+    @GetMapping("/v1/{taskId}/attachments")
+    public ResponseEntity<List<AttachmentDto>> attachments(@PathVariable UUID taskId){
+        return ResponseEntity.ok(taskService.getTaskAttachments(taskId));
+    }
 }

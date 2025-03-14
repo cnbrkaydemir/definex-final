@@ -1,9 +1,6 @@
 package com.cnbrkaydemir.tasks.service;
 
-import com.cnbrkaydemir.tasks.dto.CreateTaskDto;
-import com.cnbrkaydemir.tasks.dto.ProjectDto;
-import com.cnbrkaydemir.tasks.dto.TaskDto;
-import com.cnbrkaydemir.tasks.dto.UserDto;
+import com.cnbrkaydemir.tasks.dto.*;
 import com.cnbrkaydemir.tasks.exception.notfound.TaskNotFoundException;
 import com.cnbrkaydemir.tasks.exception.notfound.TeamNotFoundException;
 import com.cnbrkaydemir.tasks.exception.notfound.UserNotFoundException;
@@ -23,4 +20,6 @@ public interface TaskService {
     ProjectDto getTaskProject(UUID id) throws TaskNotFoundException;
     TaskDto updateTaskPriority(UUID id, TaskPriority priority) throws TaskNotFoundException;
     TaskDto updateTaskProgress(UUID id, TaskProgress progress) throws TaskNotFoundException;
+    List<CommentDto> getTaskComments(UUID id) throws TaskNotFoundException;
+    List<AttachmentDto> getTaskAttachments(UUID id) throws TaskNotFoundException;
 }

@@ -1,9 +1,6 @@
 package com.cnbrkaydemir.tasks.service.impl;
 
-import com.cnbrkaydemir.tasks.dto.CreateTaskDto;
-import com.cnbrkaydemir.tasks.dto.ProjectDto;
-import com.cnbrkaydemir.tasks.dto.TaskDto;
-import com.cnbrkaydemir.tasks.dto.UserDto;
+import com.cnbrkaydemir.tasks.dto.*;
 import com.cnbrkaydemir.tasks.exception.notfound.ProjectNotFoundException;
 import com.cnbrkaydemir.tasks.exception.notfound.TaskNotFoundException;
 import com.cnbrkaydemir.tasks.exception.notfound.TeamNotFoundException;
@@ -99,5 +96,23 @@ public class TaskServiceImpl implements TaskService {
         Task task = taskRepository.findById(id).orElseThrow(()-> new TaskNotFoundException(id));
         task.setProgress(progress);
         return modelMapper.map(taskRepository.save(task), TaskDto.class);
+    }
+
+    @Override
+    public List<CommentDto> getTaskComments(UUID id) throws TaskNotFoundException {
+        Task task = taskRepository.findById(id).orElseThrow(()-> new TaskNotFoundException(id));
+        return taskRepository.findActiveCommentsByTaskId(task.getId())
+                .stream()
+                .map(comment -> modelMapper.map(comment, CommentDto.class))
+                .toList();
+    }
+
+    @Override
+    public List<AttachmentDto> getTaskAttachments(UUID id) throws TaskNotFoundException {
+        Task task = taskRepository.findById(id).orElseThrow(()-> new TaskNotFoundException(id));
+        return taskRepository.findActiveAttachmentsByTaskId(task.getId())
+                .stream()
+                .map(attachment -> modelMapper.map(attachment, AttachmentDto.class))
+                .toList();
     }
 }
