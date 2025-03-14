@@ -9,8 +9,7 @@ import java.util.UUID;
 
 @Data
 @EqualsAndHashCode(callSuper=false)
-public class ProjectDto extends BaseDto {
-
+public class CreateProjectDto {
     private UUID id;
 
     private String name;
@@ -22,4 +21,6 @@ public class ProjectDto extends BaseDto {
     private Date dueDate;
 
     private ProjectStatus status;
+
+    private UUID departmentId;
 }
