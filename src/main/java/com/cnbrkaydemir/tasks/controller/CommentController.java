@@ -31,8 +31,9 @@ public class CommentController {
 
     @PostMapping("/v1")
     public ResponseEntity<CommentDto> create(@RequestBody CreateCommentDto commentDto){
-        return ResponseEntity.created(URI.create("/api/comment/v1/"+commentDto.getId()))
-                .body(commentService.createComment(commentDto));
+        CommentDto newComment = commentService.createComment(commentDto);
+        return ResponseEntity.created(URI.create("/api/comment/v1/"+newComment.getId()))
+                .body(newComment);
     }
 
     @PatchMapping("/v1/{commentId}")

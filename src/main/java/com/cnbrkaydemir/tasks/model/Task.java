@@ -44,10 +44,10 @@ public class Task extends BaseEntity{
     @JoinColumn(name = "user_id")
     private Users assignee;
 
-    @OneToMany(mappedBy = "tasks", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Comment> comments;
 
-    @OneToMany(mappedBy = "tasks", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Attachment> attachments;
 
 }

@@ -40,9 +40,9 @@ public class Project extends BaseEntity {
     @JoinColumn(name = "department_id")
     private Department department;
 
-    @OneToMany(mappedBy = "projects", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "project", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Team> teams;
 
-    @OneToMany(mappedBy = "projects")
+    @OneToMany(mappedBy = "project")
     private List<Task> tasks;
 }

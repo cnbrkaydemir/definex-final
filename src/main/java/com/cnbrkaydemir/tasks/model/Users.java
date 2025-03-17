@@ -36,10 +36,10 @@ public class Users extends BaseEntity {
     @ManyToMany(mappedBy = "teamMembers")
     private List<Team> teams;
 
-    @OneToMany(mappedBy = "users", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "assignee", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Task> tasks;
 
-    @OneToMany(mappedBy = "users", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "commentedBy", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Comment> comments;
 
 }

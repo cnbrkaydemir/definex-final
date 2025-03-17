@@ -3,7 +3,8 @@ package com.cnbrkaydemir.tasks.service.impl;
 import com.cnbrkaydemir.tasks.exception.filestorage.StorageException;
 import com.cnbrkaydemir.tasks.exception.filestorage.StorageFileNotFoundException;
 import com.cnbrkaydemir.tasks.service.FileService;
-import lombok.Value;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
@@ -26,20 +27,14 @@ public class FileServiceImpl implements FileService {
     @Value("${file.upload.dir}")
     private String uploadDir;
 
-    private final Path rootLocation;
+    private Path rootLocation;
 
 
-    public FileServiceImpl() {
-
-        if(this.uploadDir.trim().isEmpty()){
-            throw new StorageException("File upload location can not be Empty.");
-        }
-
-        this.rootLocation = Paths.get(this.uploadDir);
-    }
 
     @Override
     public void store(MultipartFile file) {
+        this.init();
+
         try {
             if (file.isEmpty()) {
                 throw new StorageException("Failed to store empty file.");
@@ -58,19 +53,21 @@ public class FileServiceImpl implements FileService {
             }
         }
         catch (IOException e) {
-            throw new StorageException("Failed to store file.", e);
+            throw new StorageException("Failed to store file.");
         }
     }
 
     @Override
     public Stream<Path> loadAll() {
+        this.init();
+
         try {
             return Files.walk(this.rootLocation, 1)
                     .filter(path -> !path.equals(this.rootLocation))
                     .map(this.rootLocation::relativize);
         }
         catch (IOException e) {
-            throw new StorageException("Failed to read stored files", e);
+            throw new StorageException("Failed to read stored files");
         }
 
     }
@@ -95,7 +92,7 @@ public class FileServiceImpl implements FileService {
             }
         }
         catch (MalformedURLException e) {
-            throw new StorageFileNotFoundException("Could not read file: " + filename, e);
+            throw new StorageFileNotFoundException("Could not read file: " + filename);
         }
     }
 
@@ -106,21 +103,29 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public void init() {
+        if(this.uploadDir.trim().isEmpty()){
+            throw new StorageException("File upload location can not be Empty.");
+        }
+
+        this.rootLocation = Paths.get(this.uploadDir);
+
         try {
             Files.createDirectories(rootLocation);
         }
         catch (IOException e) {
-            throw new StorageException("Could not initialize storage", e);
+            throw new StorageException("Could not initialize storage");
         }
     }
 
     @Override
     public void delete(String filename) {
+        this.init();
+
         try {
             Path file = load(filename);
             Files.deleteIfExists(file);
         } catch (IOException e) {
-            throw new StorageException("Failed to delete file: " + filename, e);
+            throw new StorageException("Failed to delete file: " + filename);
         }
     }
 

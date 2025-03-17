@@ -24,9 +24,9 @@ public class Department extends BaseEntity {
     @Column(name = "description")
     private String description;
 
-    @OneToMany(mappedBy = "departments", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "department", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Project> projects;
 
-    @OneToMany(mappedBy = "departments", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "department", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Team> teams;
 }

@@ -32,14 +32,9 @@ public class AttachmentController {
     @PostMapping("/v1/{taskId}")
     public ResponseEntity<AttachmentDto> create(@PathVariable UUID taskId,@RequestBody MultipartFile file){
         AttachmentDto attachmentDto = attachmentService.createAttachment(taskId, file);
-        return ResponseEntity.created(URI.create("/api/attachment/" + attachmentDto.getId()))
-                .body(attachmentDto);
+        return ResponseEntity.ok(attachmentDto);
     }
 
-    @PatchMapping("/v1/{attachmentId}")
-    public ResponseEntity<AttachmentDto> update(@PathVariable UUID attachmentId, @RequestBody MultipartFile file){
-        return ResponseEntity.ok(attachmentService.updateAttachment(attachmentId, file));
-    }
 
     @DeleteMapping("/v1/{attachmentId}")
     public ResponseEntity<Void> delete(@PathVariable UUID attachmentId){
