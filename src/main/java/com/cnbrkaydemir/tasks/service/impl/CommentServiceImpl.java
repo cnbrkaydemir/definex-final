@@ -1,9 +1,13 @@
 package com.cnbrkaydemir.tasks.service.impl;
 
 import com.cnbrkaydemir.tasks.dto.CommentDto;
+import com.cnbrkaydemir.tasks.dto.CreateCommentDto;
 import com.cnbrkaydemir.tasks.exception.notfound.CommentNotFoundException;
+import com.cnbrkaydemir.tasks.exception.notfound.UserNotFoundException;
 import com.cnbrkaydemir.tasks.model.Comment;
+import com.cnbrkaydemir.tasks.model.Users;
 import com.cnbrkaydemir.tasks.repository.CommentRepository;
+import com.cnbrkaydemir.tasks.repository.UsersRepository;
 import com.cnbrkaydemir.tasks.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -18,12 +22,16 @@ public class CommentServiceImpl implements CommentService {
 
     private final CommentRepository commentRepository;
 
+    private final UsersRepository usersRepository;
+
     private final ModelMapper modelMapper;
 
     @Override
-    public CommentDto createComment(CommentDto commentDto) {
+    public CommentDto createComment(CreateCommentDto commentDto) {
+        Users user =  usersRepository.findById(commentDto.getUserId()).orElseThrow(()->new UserNotFoundException(commentDto.getUserId()));
         Comment comment = modelMapper.map(commentDto, Comment.class);
         comment.setDeleted(false);
+        comment.setCommentedBy(user);
         return modelMapper.map(commentRepository.save(comment), CommentDto.class);
     }
 
