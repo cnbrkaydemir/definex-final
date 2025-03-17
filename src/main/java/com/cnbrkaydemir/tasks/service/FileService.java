@@ -19,4 +19,6 @@ public interface FileService {
     Resource loadAsResource(String filename);
 
     void deleteAll();
+
+    void delete(String filename);
 }

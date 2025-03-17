@@ -114,4 +114,14 @@ public class FileServiceImpl implements FileService {
         }
     }
 
+    @Override
+    public void delete(String filename) {
+        try {
+            Path file = load(filename);
+            Files.deleteIfExists(file);
+        } catch (IOException e) {
+            throw new StorageException("Failed to delete file: " + filename, e);
+        }
+    }
+
 }

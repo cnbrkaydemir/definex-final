@@ -2,12 +2,19 @@ package com.cnbrkaydemir.tasks.service.impl;
 
 import com.cnbrkaydemir.tasks.dto.AttachmentDto;
 import com.cnbrkaydemir.tasks.exception.notfound.AttachmentNotFoundException;
+import com.cnbrkaydemir.tasks.exception.notfound.TaskNotFoundException;
 import com.cnbrkaydemir.tasks.model.Attachment;
+import com.cnbrkaydemir.tasks.model.AttachmentType;
+import com.cnbrkaydemir.tasks.model.Task;
 import com.cnbrkaydemir.tasks.repository.AttachmentRepository;
+import com.cnbrkaydemir.tasks.repository.TaskRepository;
 import com.cnbrkaydemir.tasks.service.AttachmentService;
+import com.cnbrkaydemir.tasks.service.FileService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.UUID;
@@ -18,41 +25,48 @@ public class AttachmentServiceImpl implements AttachmentService {
 
     private final AttachmentRepository attachmentRepository;
 
+    private final TaskRepository taskRepository;
+
+    private final FileService fileService;
+
     private final ModelMapper modelMapper;
 
     @Override
-    public AttachmentDto getAttachment(UUID id) throws AttachmentNotFoundException {
+    public Resource getAttachment(UUID id) throws AttachmentNotFoundException {
         Attachment attachment = attachmentRepository.findById(id).orElseThrow(()->new AttachmentNotFoundException(id));
-        return modelMapper.map(attachment, AttachmentDto.class);
+        return fileService.loadAsResource(attachment.getName());
     }
 
     @Override
-    public List<AttachmentDto> getAllAttachments() {
+    public List<Resource> getAllAttachments() {
         return attachmentRepository.findAll()
                 .stream()
-                .map(attachment -> modelMapper.map(attachment, AttachmentDto.class))
+                .map(attachment -> fileService.loadAsResource(attachment.getName()))
                 .toList();
     }
 
     @Override
     public boolean deleteAttachment(UUID id) throws AttachmentNotFoundException {
         Attachment attachment = attachmentRepository.findById(id).orElseThrow(()->new AttachmentNotFoundException(id));
+        fileService.delete(attachment.getName());
         attachment.setDeleted(true);
         attachmentRepository.save(attachment);
         return true;
     }
 
     @Override
-    public AttachmentDto createAttachment(AttachmentDto attachmentDto) {
-        Attachment attachment = modelMapper.map(attachmentDto, Attachment.class);
+    public AttachmentDto createAttachment(UUID taskId, MultipartFile file) {
+        Task task = taskRepository.findById(taskId).orElseThrow(()->new TaskNotFoundException(taskId));
+
+        fileService.store(file);
+
+        Attachment attachment = new Attachment();
+        attachment.setName(file.getOriginalFilename());
+        attachment.setType(AttachmentType.valueOf(file.getContentType()));
+        attachment.setPath(file.getOriginalFilename());
+        attachment.setTask(task);
         attachment.setDeleted(false);
         return modelMapper.map(attachmentRepository.save(attachment), AttachmentDto.class);
     }
 
-    @Override
-    public AttachmentDto updateAttachment(UUID id, AttachmentDto attachment) throws AttachmentNotFoundException {
-        Attachment oldAttachment = attachmentRepository.findById(id).orElseThrow(()->new AttachmentNotFoundException(id));
-        modelMapper.map(attachment, oldAttachment);
-        return modelMapper.map(attachmentRepository.save(oldAttachment), AttachmentDto.class);
-    }
 }
