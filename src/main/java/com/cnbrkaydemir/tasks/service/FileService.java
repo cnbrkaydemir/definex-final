@@ -3,11 +3,20 @@ package com.cnbrkaydemir.tasks.service;
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.UUID;
+import java.nio.file.Path;
+import java.util.stream.Stream;
 
 public interface FileService {
 
-String store(MultipartFile file, UUID taskId);
-Resource load(String fileName, UUID taskId);
+    void init();
 
+    void store(MultipartFile file);
+
+    Stream<Path> loadAll();
+
+    Path load(String filename);
+
+    Resource loadAsResource(String filename);
+
+    void deleteAll();
 }

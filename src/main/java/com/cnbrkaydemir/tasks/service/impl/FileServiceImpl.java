@@ -1,84 +1,117 @@
 package com.cnbrkaydemir.tasks.service.impl;
 
+import com.cnbrkaydemir.tasks.exception.filestorage.StorageException;
+import com.cnbrkaydemir.tasks.exception.filestorage.StorageFileNotFoundException;
 import com.cnbrkaydemir.tasks.service.FileService;
 import lombok.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
+import org.springframework.util.FileSystemUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.stream.Stream;
 
 @Service
 public class FileServiceImpl implements FileService {
 
 
-    private final Path uploadLocation;
-
     @Value("${file.upload.dir}")
     private String uploadDir;
 
+    private final Path rootLocation;
+
+
     public FileServiceImpl() {
-        this.uploadLocation = Paths.get(uploadDir)
-                .toAbsolutePath()
-                .normalize();
 
-        try {
-            Files.createDirectories(this.uploadLocation);
-        } catch (Exception ex) {
-            throw new RuntimeException("Could not create the directory where the uploaded files will be stored.", ex);
+        if(this.uploadDir.trim().isEmpty()){
+            throw new StorageException("File upload location can not be Empty.");
         }
 
+        this.rootLocation = Paths.get(this.uploadDir);
     }
 
     @Override
-    public String store(MultipartFile file, UUID taskId) {
-        Path taskDirectory = this.uploadLocation.resolve(taskId.toString());
+    public void store(MultipartFile file) {
         try {
-            Files.createDirectories(taskDirectory);
-        } catch (Exception ex) {
-            throw new RuntimeException("Could not create task directory.", ex);
-        }
-
-        String originalFilename = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
-
-        // Generate unique filename to prevent conflicts
-        String fileExtension = "";
-        if (originalFilename.contains(".")) {
-            fileExtension = originalFilename.substring(originalFilename.lastIndexOf("."));
-        }
-
-        String uniqueFilename = UUID.randomUUID().toString() + fileExtension;
-
-        try {
-            Path targetLocation = taskDirectory.resolve(uniqueFilename);
-            Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
-            return uniqueFilename;
-        } catch (IOException ex) {
-            throw new RuntimeException("Could not store file " + originalFilename +" !");
-        }
-    }
-
-    @Override
-    public Resource load(String fileName, UUID taskId) {
-        try {
-            Path filePath = this.uploadLocation.resolve(taskId.toString()).resolve(fileName).normalize();
-            Resource resource = new UrlResource(filePath.toUri());
-            if (resource.exists()) {
-                return resource;
-            } else {
-                throw new RuntimeException("File not found " + fileName);
+            if (file.isEmpty()) {
+                throw new StorageException("Failed to store empty file.");
             }
-        } catch (MalformedURLException ex) {
-            throw new RuntimeException("File not found " + fileName, ex);
+            Path destinationFile = this.rootLocation.resolve(
+                            Paths.get(file.getOriginalFilename()))
+                    .normalize().toAbsolutePath();
+            if (!destinationFile.getParent().equals(this.rootLocation.toAbsolutePath())) {
+                // This is a security check
+                throw new StorageException(
+                        "Cannot store file outside current directory.");
+            }
+            try (InputStream inputStream = file.getInputStream()) {
+                Files.copy(inputStream, destinationFile,
+                        StandardCopyOption.REPLACE_EXISTING);
+            }
+        }
+        catch (IOException e) {
+            throw new StorageException("Failed to store file.", e);
         }
     }
+
+    @Override
+    public Stream<Path> loadAll() {
+        try {
+            return Files.walk(this.rootLocation, 1)
+                    .filter(path -> !path.equals(this.rootLocation))
+                    .map(this.rootLocation::relativize);
+        }
+        catch (IOException e) {
+            throw new StorageException("Failed to read stored files", e);
+        }
+
+    }
+
+    @Override
+    public Path load(String filename) {
+        return rootLocation.resolve(filename);
+    }
+
+    @Override
+    public Resource loadAsResource(String filename) {
+        try {
+            Path file = load(filename);
+            Resource resource = new UrlResource(file.toUri());
+            if (resource.exists() || resource.isReadable()) {
+                return resource;
+            }
+            else {
+                throw new StorageFileNotFoundException(
+                        "Could not read file: " + filename);
+
+            }
+        }
+        catch (MalformedURLException e) {
+            throw new StorageFileNotFoundException("Could not read file: " + filename, e);
+        }
+    }
+
+    @Override
+    public void deleteAll() {
+        FileSystemUtils.deleteRecursively(rootLocation.toFile());
+    }
+
+    @Override
+    public void init() {
+        try {
+            Files.createDirectories(rootLocation);
+        }
+        catch (IOException e) {
+            throw new StorageException("Could not initialize storage", e);
+        }
+    }
+
 }
