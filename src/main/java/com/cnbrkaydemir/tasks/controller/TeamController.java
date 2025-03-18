@@ -50,7 +50,7 @@ public class TeamController {
         return ResponseEntity.ok(teamService.getTeamUsers(teamId));
     }
 
-    @PostMapping("/v1/{teamId}/users/{userId}")
+    @PostMapping("/v1/{teamId}/user/{userId}")
     public ResponseEntity<TeamDto> addTeamMember(@PathVariable UUID teamId, @PathVariable UUID userId){
         return ResponseEntity.ok(teamService.addUserToTeam(teamId, userId));
     }

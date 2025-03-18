@@ -1,9 +1,5 @@
 package com.cnbrkaydemir.tasks.dto;
 
-import com.cnbrkaydemir.tasks.model.AttachmentType;
-import jakarta.persistence.Column;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -20,7 +16,7 @@ public class AttachmentDto extends BaseDto{
 
     private String path;
 
-    private AttachmentType type;
+    private String type;
 
     private Date createdDate;
 }

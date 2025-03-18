@@ -10,8 +10,11 @@ import java.util.List;
 import java.util.UUID;
 
 public interface AttachmentService {
-    Resource getAttachment(UUID id) throws AttachmentNotFoundException;
-    List<Resource> getAllAttachments();
+    Resource getAttachmentAsResource(UUID id) throws AttachmentNotFoundException;
+    AttachmentDto getAttachment(UUID id) throws AttachmentNotFoundException;
+    List<Resource> getAllAttachmentsAsResource();
+    List<AttachmentDto> getAllAttachments();
     boolean deleteAttachment(UUID id) throws AttachmentNotFoundException;
     AttachmentDto createAttachment(UUID taskId,MultipartFile file);
+    Attachment createAttachmentFromFile(MultipartFile file);
 }

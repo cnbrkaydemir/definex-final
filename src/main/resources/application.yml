@@ -1,6 +1,6 @@
 file:
   upload:
-    dir: ./dir
+    dir: ./uploads
 spring:
   jpa:
     show-sql: true

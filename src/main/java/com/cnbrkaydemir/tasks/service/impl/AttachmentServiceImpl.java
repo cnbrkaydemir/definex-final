@@ -4,7 +4,6 @@ import com.cnbrkaydemir.tasks.dto.AttachmentDto;
 import com.cnbrkaydemir.tasks.exception.notfound.AttachmentNotFoundException;
 import com.cnbrkaydemir.tasks.exception.notfound.TaskNotFoundException;
 import com.cnbrkaydemir.tasks.model.Attachment;
-import com.cnbrkaydemir.tasks.model.AttachmentType;
 import com.cnbrkaydemir.tasks.model.Task;
 import com.cnbrkaydemir.tasks.repository.AttachmentRepository;
 import com.cnbrkaydemir.tasks.repository.TaskRepository;
@@ -16,8 +15,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -32,16 +30,29 @@ public class AttachmentServiceImpl implements AttachmentService {
     private final ModelMapper modelMapper;
 
     @Override
-    public Resource getAttachment(UUID id) throws AttachmentNotFoundException {
+    public Resource getAttachmentAsResource(UUID id) throws AttachmentNotFoundException {
         Attachment attachment = attachmentRepository.findById(id).orElseThrow(()->new AttachmentNotFoundException(id));
         return fileService.loadAsResource(attachment.getName());
     }
 
     @Override
-    public List<Resource> getAllAttachments() {
+    public AttachmentDto getAttachment(UUID id) throws AttachmentNotFoundException {
+        return modelMapper.map(attachmentRepository.findById(id), AttachmentDto.class);
+    }
+
+    @Override
+    public List<Resource> getAllAttachmentsAsResource() {
         return attachmentRepository.findAll()
                 .stream()
                 .map(attachment -> fileService.loadAsResource(attachment.getName()))
+                .toList();
+    }
+
+    @Override
+    public List<AttachmentDto> getAllAttachments() {
+        return attachmentRepository.findAll()
+                .stream()
+                .map(attachment -> modelMapper.map(attachment, AttachmentDto.class))
                 .toList();
     }
 
@@ -60,13 +71,19 @@ public class AttachmentServiceImpl implements AttachmentService {
 
         fileService.store(file);
 
-        Attachment attachment = new Attachment();
-        attachment.setName(file.getOriginalFilename());
-        attachment.setType(AttachmentType.valueOf(file.getContentType()));
-        attachment.setPath(file.getOriginalFilename());
+        Attachment attachment = createAttachmentFromFile(file);
         attachment.setTask(task);
-        attachment.setDeleted(false);
         return modelMapper.map(attachmentRepository.save(attachment), AttachmentDto.class);
     }
 
+    @Override
+    public Attachment createAttachmentFromFile(MultipartFile file) {
+        Attachment attachment = new Attachment();
+        attachment.setName(file.getOriginalFilename());
+        attachment.setType(file.getContentType());
+        attachment.setPath("./uploads/"+file.getOriginalFilename());
+        attachment.setCreatedDate(new Date());
+        attachment.setDeleted(false);
+        return attachment;
+    }
 }

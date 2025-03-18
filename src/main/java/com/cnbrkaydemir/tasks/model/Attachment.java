@@ -23,8 +23,8 @@ public class Attachment extends BaseEntity{
     @Column(nullable = false, name = "path")
     private String path;
 
-    @Enumerated(EnumType.STRING)
-    private AttachmentType type;
+    @Column(nullable = false, name = "type")
+    private String type;
 
     @ManyToOne
     @JoinColumn(name = "task_id")
