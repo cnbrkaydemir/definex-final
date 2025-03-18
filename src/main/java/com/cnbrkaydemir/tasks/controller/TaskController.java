@@ -2,7 +2,6 @@ package com.cnbrkaydemir.tasks.controller;
 
 import com.cnbrkaydemir.tasks.dto.*;
 import com.cnbrkaydemir.tasks.model.TaskPriority;
-import com.cnbrkaydemir.tasks.model.TaskProgress;
 import com.cnbrkaydemir.tasks.service.TaskService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -57,7 +56,7 @@ public class TaskController {
     }
 
     @PatchMapping("/v1/{taskId}/progress")
-    public ResponseEntity<TaskDto> progress(@PathVariable UUID taskId, @RequestBody TaskProgress taskProgress){
+    public ResponseEntity<TaskDto> progress(@PathVariable UUID taskId, @RequestBody TaskDto taskProgress){
         return ResponseEntity.ok(taskService.updateTaskProgress(taskId, taskProgress));
     }
 

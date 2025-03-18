@@ -10,7 +10,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @ComponentScans({
 		@ComponentScan("com.cnbrkaydemir.tasks.controller"),
 		@ComponentScan("com.cnbrkaydemir.tasks.service"),
-		@ComponentScan("com.cnbrkaydemir.tasks.config")
+		@ComponentScan("com.cnbrkaydemir.tasks.config"),
+		@ComponentScan("com.cnbrkaydemir.tasks.exception"),
 })
 @EnableJpaRepositories("com.cnbrkaydemir.tasks.repository")
 public class TasksApplication {

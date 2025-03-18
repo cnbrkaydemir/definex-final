@@ -9,6 +9,7 @@ import com.cnbrkaydemir.tasks.model.*;
 import com.cnbrkaydemir.tasks.repository.ProjectRepository;
 import com.cnbrkaydemir.tasks.repository.TaskRepository;
 import com.cnbrkaydemir.tasks.repository.UsersRepository;
+import com.cnbrkaydemir.tasks.service.TaskProgressValidationService;
 import com.cnbrkaydemir.tasks.service.TaskService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -26,6 +27,8 @@ public class TaskServiceImpl implements TaskService {
     private final UsersRepository userRepository;
 
     private final ProjectRepository projectRepository;
+
+    private final TaskProgressValidationService taskProgressValidationService;
 
     private final ModelMapper modelMapper;
 
@@ -48,6 +51,8 @@ public class TaskServiceImpl implements TaskService {
         Users user = userRepository.findById(taskDto.getUserId()).orElseThrow(()-> new UserNotFoundException(taskDto.getUserId()));
         Project project = projectRepository.findById(taskDto.getProjectId()).orElseThrow(()-> new ProjectNotFoundException(taskDto.getProjectId()));
 
+        taskProgressValidationService.validateReason(modelMapper.map(taskDto, TaskDto.class));
+
         Task task = CreateTaskDto.convertToTask(taskDto);
         task.setProject(project);
         task.setAssignee(user);
@@ -66,6 +71,10 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public TaskDto updateTask(UUID id, TaskDto task) throws TaskNotFoundException {
         Task oldTask = taskRepository.findById(id).orElseThrow(()-> new TaskNotFoundException(id));
+
+        taskProgressValidationService.validateTransition(oldTask.getProgress(), task.getProgress());
+        taskProgressValidationService.validateReason(task);
+
         modelMapper.map(task, oldTask);
         return modelMapper.map(taskRepository.save(oldTask), TaskDto.class);
     }
@@ -92,9 +101,11 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public TaskDto updateTaskProgress(UUID id, TaskProgress progress) throws TaskNotFoundException {
+    public TaskDto updateTaskProgress(UUID id, TaskDto progressDto) throws TaskNotFoundException {
         Task task = taskRepository.findById(id).orElseThrow(()-> new TaskNotFoundException(id));
-        task.setProgress(progress);
+        taskProgressValidationService.validateTransition(task.getProgress(), progressDto.getProgress());
+        taskProgressValidationService.validateReason(progressDto);
+        task.setProgress(progressDto.getProgress());
         return modelMapper.map(taskRepository.save(task), TaskDto.class);
     }
 
