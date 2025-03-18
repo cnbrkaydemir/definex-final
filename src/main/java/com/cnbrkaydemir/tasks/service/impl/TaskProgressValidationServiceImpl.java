@@ -1,6 +1,6 @@
 package com.cnbrkaydemir.tasks.service.impl;
 
-import com.cnbrkaydemir.tasks.dto.TaskDto;
+import com.cnbrkaydemir.tasks.dto.UpdateTaskProgressDto;
 import com.cnbrkaydemir.tasks.exception.state.InvalidProgressTransitionException;
 import com.cnbrkaydemir.tasks.exception.state.ReasonCannotBeEmptyException;
 import com.cnbrkaydemir.tasks.model.TaskProgress;
@@ -33,10 +33,10 @@ public class TaskProgressValidationServiceImpl implements TaskProgressValidation
     }
 
     @Override
-    public void validateReason(TaskDto taskDto) {
-        if (taskDto.getReason() == null &&
-                (taskDto.getProgress() == TaskProgress.BLOCKED || taskDto.getProgress() == TaskProgress.CANCELLED)) {
-            throw new ReasonCannotBeEmptyException("Progress state "+taskDto.getProgress()+ " requires a reason.");
+    public void validateReason(TaskProgress taskProgress, String reason) {
+        if (reason == null &&
+                (taskProgress == TaskProgress.BLOCKED || taskProgress == TaskProgress.CANCELLED)) {
+            throw new ReasonCannotBeEmptyException("Progress state "+taskProgress+ " requires a reason.");
         }
     }
 }

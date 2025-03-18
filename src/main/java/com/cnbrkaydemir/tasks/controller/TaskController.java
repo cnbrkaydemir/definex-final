@@ -56,7 +56,7 @@ public class TaskController {
     }
 
     @PatchMapping("/v1/{taskId}/progress")
-    public ResponseEntity<TaskDto> progress(@PathVariable UUID taskId, @RequestBody TaskDto taskProgress){
+    public ResponseEntity<TaskDto> progress(@PathVariable UUID taskId, @RequestBody UpdateTaskProgressDto taskProgress){
         return ResponseEntity.ok(taskService.updateTaskProgress(taskId, taskProgress));
     }
 

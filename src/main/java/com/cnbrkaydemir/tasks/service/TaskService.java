@@ -19,7 +19,7 @@ public interface TaskService {
     UserDto getTaskAssignee(UUID id) throws TaskNotFoundException;
     ProjectDto getTaskProject(UUID id) throws TaskNotFoundException;
     TaskDto updateTaskPriority(UUID id, TaskPriority priority) throws TaskNotFoundException;
-    public TaskDto updateTaskProgress(UUID id, TaskDto progressDto) throws TaskNotFoundException;
+    public TaskDto updateTaskProgress(UUID id, UpdateTaskProgressDto progressDto) throws TaskNotFoundException;
     List<CommentDto> getTaskComments(UUID id) throws TaskNotFoundException;
     List<AttachmentDto> getTaskAttachments(UUID id) throws TaskNotFoundException;
 }
