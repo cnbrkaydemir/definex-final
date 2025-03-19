@@ -3,8 +3,6 @@ package com.cnbrkaydemir.tasks.model;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.Date;
 import java.util.List;

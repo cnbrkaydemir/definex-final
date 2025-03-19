@@ -3,7 +3,6 @@ package com.cnbrkaydemir.tasks.controller;
 import com.cnbrkaydemir.tasks.dto.DepartmentDto;
 import com.cnbrkaydemir.tasks.dto.ProjectDto;
 import com.cnbrkaydemir.tasks.dto.TeamDto;
-import com.cnbrkaydemir.tasks.model.Department;
 import com.cnbrkaydemir.tasks.service.DepartmentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

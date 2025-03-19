@@ -9,7 +9,6 @@ import com.cnbrkaydemir.tasks.service.LoginService;
 import com.cnbrkaydemir.tasks.service.TokenService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;

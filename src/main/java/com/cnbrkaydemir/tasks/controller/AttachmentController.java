@@ -1,7 +1,6 @@
 package com.cnbrkaydemir.tasks.controller;
 
 import com.cnbrkaydemir.tasks.dto.AttachmentDto;
-import com.cnbrkaydemir.tasks.model.Attachment;
 import com.cnbrkaydemir.tasks.service.AttachmentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;

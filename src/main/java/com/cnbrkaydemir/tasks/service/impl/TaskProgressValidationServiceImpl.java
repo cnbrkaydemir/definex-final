@@ -1,6 +1,6 @@
 package com.cnbrkaydemir.tasks.service.impl;
 
-import com.cnbrkaydemir.tasks.dto.UpdateTaskProgressDto;
+
 import com.cnbrkaydemir.tasks.exception.state.InvalidProgressTransitionException;
 import com.cnbrkaydemir.tasks.exception.state.ReasonCannotBeEmptyException;
 import com.cnbrkaydemir.tasks.model.TaskProgress;

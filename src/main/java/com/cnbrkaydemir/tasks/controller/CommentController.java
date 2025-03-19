@@ -2,7 +2,6 @@ package com.cnbrkaydemir.tasks.controller;
 
 import com.cnbrkaydemir.tasks.dto.CommentDto;
 import com.cnbrkaydemir.tasks.dto.CreateCommentDto;
-import com.cnbrkaydemir.tasks.model.Comment;
 import com.cnbrkaydemir.tasks.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
