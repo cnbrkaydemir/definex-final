@@ -1,6 +1,7 @@
 package com.cnbrkaydemir.tasks.controller;
 
 import com.cnbrkaydemir.tasks.dto.*;
+import com.cnbrkaydemir.tasks.model.Users;
 import com.cnbrkaydemir.tasks.service.UsersService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +29,7 @@ public class UsersController {
     }
 
     @PostMapping("/v1")
-    public ResponseEntity<UserDto> create(@RequestBody UserDto userDto){
+    public ResponseEntity<UserDto> create(@RequestBody Users userDto){
         return ResponseEntity.created(URI.create("/api/user/v1/"+userDto.getId()))
                 .body(usersService.create(userDto));
     }

@@ -7,6 +7,7 @@ import com.cnbrkaydemir.tasks.repository.UsersRepository;
 import com.cnbrkaydemir.tasks.service.UsersService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,6 +20,8 @@ public class UsersServiceImpl implements UsersService {
     private final UsersRepository usersRepository;
 
     private final ModelMapper modelMapper;
+
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public UserDto get(UUID id) throws UserNotFoundException {
@@ -35,10 +38,12 @@ public class UsersServiceImpl implements UsersService {
     }
 
     @Override
-    public UserDto create(UserDto userDto) {
-        Users targetUser = modelMapper.map(userDto, Users.class);
-        targetUser.setDeleted(false);
-        return modelMapper.map(usersRepository.save(targetUser), UserDto.class);
+    public UserDto create(Users user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setDeleted(false);
+
+        Users savedUser = usersRepository.save(user);
+        return modelMapper.map(savedUser, UserDto.class);
     }
 
     @Override

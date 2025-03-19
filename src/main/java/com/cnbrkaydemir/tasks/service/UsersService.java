@@ -2,6 +2,7 @@ package com.cnbrkaydemir.tasks.service;
 
 import com.cnbrkaydemir.tasks.dto.*;
 import com.cnbrkaydemir.tasks.exception.notfound.UserNotFoundException;
+import com.cnbrkaydemir.tasks.model.Users;
 
 
 import java.util.List;
@@ -10,7 +11,7 @@ import java.util.UUID;
 public interface UsersService {
     UserDto get(UUID id) throws UserNotFoundException;
     List<UserDto> getAll();
-    UserDto create(UserDto userDto);
+    UserDto create(Users user);
     UserDto update(UUID id, UserDto user) throws UserNotFoundException;
     boolean delete(UUID id) throws UserNotFoundException;
     List<TaskDto> getUserTasks(UUID id);

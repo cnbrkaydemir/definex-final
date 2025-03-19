@@ -16,3 +16,9 @@ spring:
     url: ${DB_URL}
     username: ${DB_USER}
     password: ${DB_PASSWORD}
+
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG

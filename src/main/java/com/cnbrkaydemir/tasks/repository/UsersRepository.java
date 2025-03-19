@@ -6,10 +6,13 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository
 public interface UsersRepository extends BaseRepository<Users, UUID> {
+
+    Optional<Users> findByEmail(String email);
 
     @Query("SELECT t FROM Team t JOIN t.teamMembers m WHERE m.id = :userId AND " +
             "t.deleted = false AND m.deleted = false")
