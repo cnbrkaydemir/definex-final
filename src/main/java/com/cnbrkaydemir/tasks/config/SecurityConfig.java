@@ -57,7 +57,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.DELETE, "/api/team/**").hasAnyAuthority("ADMIN", "PROJECT_MANAGER")
                         .requestMatchers(HttpMethod.GET,"/api/team/**").authenticated()
 
-                        .requestMatchers(HttpMethod.POST, "/api/task/v1").hasAnyAuthority("ADMIN", "PROJECT_MANAGER")
+                        .requestMatchers(HttpMethod.POST, "/api/task/**").hasAnyAuthority("ADMIN", "PROJECT_MANAGER")
                         .requestMatchers(HttpMethod.PATCH, "/api/task/v1/{taskId}").hasAnyAuthority("ADMIN", "PROJECT_MANAGER", "TEAM_LEADER")
                         .requestMatchers(HttpMethod.PATCH, "/api/task/v1/{taskId}/priority").hasAnyAuthority("ADMIN", "PROJECT_MANAGER", "TEAM_LEADER")
                         .requestMatchers(HttpMethod.PATCH, "/api/task/v1/{taskId}/progress").hasAnyAuthority("ADMIN", "PROJECT_MANAGER", "TEAM_LEADER", "TEAM_MEMBER")

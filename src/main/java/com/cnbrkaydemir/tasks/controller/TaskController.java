@@ -74,4 +74,9 @@ public class TaskController {
     public ResponseEntity<List<AttachmentDto>> attachments(@PathVariable UUID taskId){
         return ResponseEntity.ok(taskService.getTaskAttachments(taskId));
     }
+
+    @PostMapping("/v1/{taskId}/assign/{userId}")
+    public ResponseEntity<TaskDto> assign(@PathVariable UUID taskId, @PathVariable UUID userId){
+        return ResponseEntity.ok(taskService.assignToUser(taskId, userId));
+    }
 }

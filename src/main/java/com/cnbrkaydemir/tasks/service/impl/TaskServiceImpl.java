@@ -5,6 +5,7 @@ import com.cnbrkaydemir.tasks.exception.notfound.ProjectNotFoundException;
 import com.cnbrkaydemir.tasks.exception.notfound.TaskNotFoundException;
 import com.cnbrkaydemir.tasks.exception.notfound.TeamNotFoundException;
 import com.cnbrkaydemir.tasks.exception.notfound.UserNotFoundException;
+import com.cnbrkaydemir.tasks.exception.state.TaskAlreadyAssignedException;
 import com.cnbrkaydemir.tasks.model.*;
 import com.cnbrkaydemir.tasks.repository.ProjectRepository;
 import com.cnbrkaydemir.tasks.repository.TaskRepository;
@@ -125,5 +126,17 @@ public class TaskServiceImpl implements TaskService {
                 .stream()
                 .map(attachment -> modelMapper.map(attachment, AttachmentDto.class))
                 .toList();
+    }
+
+    @Override
+    public TaskDto assignToUser(UUID taskId, UUID userId) throws TaskNotFoundException, TaskAlreadyAssignedException {
+        Task task = taskRepository.findById(taskId).orElseThrow(()-> new TaskNotFoundException(taskId));
+        Users user = userRepository.findById(userId).orElseThrow(()-> new UserNotFoundException(userId));
+
+        if (task.getAssignee() == null){
+            task.setAssignee(user);
+            return modelMapper.map(taskRepository.save(task), TaskDto.class);
+        }
+        throw  new TaskAlreadyAssignedException(task.getName());
     }
 }

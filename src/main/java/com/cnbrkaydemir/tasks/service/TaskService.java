@@ -5,7 +5,6 @@ import com.cnbrkaydemir.tasks.exception.notfound.TaskNotFoundException;
 import com.cnbrkaydemir.tasks.exception.notfound.TeamNotFoundException;
 import com.cnbrkaydemir.tasks.exception.notfound.UserNotFoundException;
 import com.cnbrkaydemir.tasks.model.TaskPriority;
-import com.cnbrkaydemir.tasks.model.TaskProgress;
 
 import java.util.List;
 import java.util.UUID;
@@ -22,4 +21,5 @@ public interface TaskService {
     public TaskDto updateTaskProgress(UUID id, UpdateTaskProgressDto progressDto) throws TaskNotFoundException;
     List<CommentDto> getTaskComments(UUID id) throws TaskNotFoundException;
     List<AttachmentDto> getTaskAttachments(UUID id) throws TaskNotFoundException;
+    TaskDto assignToUser(UUID taskId, UUID userId) throws TaskNotFoundException;
 }
