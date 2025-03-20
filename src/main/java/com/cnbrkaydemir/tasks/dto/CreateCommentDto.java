@@ -18,4 +18,6 @@ public class CreateCommentDto {
     private Date createdDate;
 
     private UUID userId;
+
+    private UUID taskId;
 }
