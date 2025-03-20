@@ -1,12 +1,17 @@
 package com.cnbrkaydemir.tasks.controller;
 
-import com.cnbrkaydemir.tasks.dto.CreateTaskDto;
-import com.cnbrkaydemir.tasks.dto.TaskDto;
+import com.cnbrkaydemir.tasks.dto.*;
 import com.cnbrkaydemir.tasks.exception.GlobalExceptionHandler;
 import com.cnbrkaydemir.tasks.exception.notfound.TaskNotFoundException;
 import com.cnbrkaydemir.tasks.exception.notfound.UserNotFoundException;
+import com.cnbrkaydemir.tasks.factory.AttachmentTestDataFactory;
+import com.cnbrkaydemir.tasks.factory.CommentTestDataFactory;
+import com.cnbrkaydemir.tasks.factory.ProjectTestDataFactory;
 import com.cnbrkaydemir.tasks.factory.TaskTestDataFactory;
 import com.cnbrkaydemir.tasks.model.Task;
+import com.cnbrkaydemir.tasks.model.Project;
+import com.cnbrkaydemir.tasks.model.TaskPriority;
+import com.cnbrkaydemir.tasks.model.TaskProgress;
 import com.cnbrkaydemir.tasks.service.TaskService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -92,7 +97,7 @@ public class TaskControllerTest {
     void findTaskById_ShouldReturnNotFound() throws Exception {
         UUID randomId = UUID.randomUUID();
         when(taskService.getTask(randomId))
-                .thenThrow(new UserNotFoundException(randomId));
+                .thenThrow(new TaskNotFoundException(randomId));
 
         String apiPath = BASE_PATH + "/v1/" + randomId.toString();
         mockMvc.perform(get(apiPath))
@@ -155,6 +160,167 @@ public class TaskControllerTest {
         mockMvc.perform(delete(apiPath))
                 .andExpect(status().isNotFound());
     }
+
+    @Test
+    void findAssignee_ShouldReturnOk() throws Exception {
+        when(taskService.getTaskAssignee(task.getId()))
+                .thenReturn(modelMapper.map(task.getAssignee(), UserDto.class));
+
+        String apiPath = BASE_PATH + "/v1/"+ task.getId()+"/assignee";
+        mockMvc.perform(get(apiPath))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void findAssignee_ShouldReturnNotFound() throws Exception {
+        UUID randomId = UUID.randomUUID();
+        when(taskService.getTaskAssignee(randomId))
+                .thenThrow(new TaskNotFoundException(randomId));
+
+        String apiPath = BASE_PATH + "/v1/"+ randomId+"/assignee";
+        mockMvc.perform(get(apiPath))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void findTaskProject_ShouldReturnOk() throws Exception {
+        Project project = ProjectTestDataFactory.createDefaultProject();
+        when(taskService.getTaskProject(task.getId())).thenReturn(modelMapper.map(project, ProjectDto.class));
+
+        String apiPath = BASE_PATH + "/v1/"+ task.getId()+"/project";
+        mockMvc.perform(get(apiPath))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void findTaskProject_ShouldReturnNotFound() throws Exception {
+        UUID randomId = UUID.randomUUID();
+        when(taskService.getTaskProject(randomId))
+                .thenThrow(new TaskNotFoundException(randomId));
+
+        String apiPath = BASE_PATH + "/v1/" + randomId.toString()+"/project";
+        mockMvc.perform(get(apiPath))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void findTaskComments_ShouldReturnOk() throws Exception {
+        CommentDto commentDto = modelMapper.map(CommentTestDataFactory.createComment(), CommentDto.class);
+        when(taskService.getTaskComments(task.getId())).thenReturn(List.of(commentDto));
+
+        String apiPath = BASE_PATH + "/v1/"+ task.getId()+"/comments";
+        mockMvc.perform(get(apiPath))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void findTaskComments_ShouldReturnNotFound() throws Exception {
+        UUID randomId = UUID.randomUUID();
+        when(taskService.getTaskComments(randomId))
+                .thenThrow(new TaskNotFoundException(randomId));
+
+        String apiPath = BASE_PATH + "/v1/" + randomId.toString()+"/comments";
+        mockMvc.perform(get(apiPath))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void findTaskAttachments_ShouldReturnOk() throws Exception {
+        AttachmentDto attachmentDto = modelMapper.map(AttachmentTestDataFactory.createAttachment(), AttachmentDto.class);
+        when(taskService.getTaskAttachments(task.getId())).thenReturn(List.of(attachmentDto));
+
+        String apiPath = BASE_PATH + "/v1/"+ task.getId()+"/attachments";
+        mockMvc.perform(get(apiPath))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void findTaskAttachments_ShouldReturnNotFound() throws Exception {
+        UUID randomId = UUID.randomUUID();
+        when(taskService.getTaskAttachments(randomId))
+                .thenThrow(new TaskNotFoundException(randomId));
+
+        String apiPath = BASE_PATH + "/v1/" + randomId.toString()+"/attachments";
+        mockMvc.perform(get(apiPath))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void updateTaskProgress_ShouldReturnOk() throws Exception {
+        UpdateTaskProgressDto updateTaskProgressDto = new UpdateTaskProgressDto();
+        updateTaskProgressDto.setProgress(TaskProgress.CANCELLED);
+        updateTaskProgressDto.setReason("Cancelled");
+        when(taskService.updateTaskProgress(taskDto.getId(), updateTaskProgressDto)).thenReturn(taskDto);
+
+        String apiPath = BASE_PATH + "/v1/"+ taskDto.getId()+"/progress";
+        mockMvc.perform(patch(apiPath)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(updateTaskProgressDto)))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void updateTaskProgress_ShouldReturnNotFound() throws Exception {
+        UpdateTaskProgressDto updateTaskProgressDto = new UpdateTaskProgressDto();
+        updateTaskProgressDto.setProgress(TaskProgress.CANCELLED);
+        updateTaskProgressDto.setReason("Cancelled");
+
+        UUID randomId = UUID.randomUUID();
+        when(taskService.updateTaskProgress(randomId, updateTaskProgressDto))
+                .thenThrow(new TaskNotFoundException(randomId));
+
+        String apiPath = BASE_PATH + "/v1/"+ randomId.toString()+"/progress";
+        mockMvc.perform(patch(apiPath)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(updateTaskProgressDto)))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void updateTaskPriority_ShouldReturnOk() throws Exception {
+        TaskPriority priority = TaskPriority.LOW;
+        when(taskService.updateTaskPriority(taskDto.getId(), priority)).thenReturn(taskDto);
+
+        String apiPath = BASE_PATH + "/v1/"+ taskDto.getId()+"/priority";
+        mockMvc.perform(patch(apiPath)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(priority)))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void updateTaskPriority_ShouldReturnNotFound() throws Exception {
+        TaskPriority priority = TaskPriority.HIGH;
+        UUID randomId = UUID.randomUUID();
+        when(taskService.updateTaskPriority(randomId, priority))
+                .thenThrow(new TaskNotFoundException(randomId));
+
+        String apiPath = BASE_PATH + "/v1/"+ randomId.toString()+"/priority";
+        mockMvc.perform(patch(apiPath)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(priority)))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void AssignTask_ShouldReturnOk() throws Exception {
+        when(taskService.assignToUser(task.getId(), task.getAssignee().getId())).thenReturn(taskDto);
+
+        String apiPath = BASE_PATH + "/v1/"+ task.getId()+"/assign/"+task.getAssignee().getId();
+        mockMvc.perform(post(apiPath))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void AssignTask_ShouldReturnNotFound() throws Exception {
+        UUID randomId = UUID.randomUUID();
+        when(taskService.assignToUser(task.getId(), randomId)).thenThrow(new UserNotFoundException(randomId));
+
+        String apiPath = BASE_PATH + "/v1/"+ task.getId()+"/assign/"+randomId;
+        mockMvc.perform(post(apiPath))
+                .andExpect(status().isNotFound());
+    }
+
 
 
 }
