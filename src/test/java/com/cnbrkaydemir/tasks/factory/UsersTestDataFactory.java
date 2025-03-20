@@ -1,7 +1,6 @@
 package com.cnbrkaydemir.tasks.factory;
 
-import com.cnbrkaydemir.tasks.model.UserRole;
-import com.cnbrkaydemir.tasks.model.Users;
+import com.cnbrkaydemir.tasks.model.*;
 
 import java.util.List;
 import java.util.UUID;
@@ -14,7 +13,8 @@ public class UsersTestDataFactory {
         user.setLastName("Doe");
         user.setEmail("john@doe.com");
         user.setPassword("password");
-        user.setTasks(List.of(TaskTestDataFactory.createDefaultTask()));
+        Task userTask = TaskTestDataFactory.createCustomTask("Task 1", "Desc", TaskProgress.IN_PROGRESS, TaskPriority.LOW, user);
+        user.setTasks(List.of(userTask));
         user.setPhoneNumber("+90 0000000");
         user.setRole(UserRole.ADMIN);
         return user;
@@ -27,7 +27,8 @@ public class UsersTestDataFactory {
         user.setLastName(lastName);
         user.setEmail(email);
         user.setPassword(password);
-        user.setTasks(List.of(TaskTestDataFactory.createDefaultTask()));
+        Task userTask = TaskTestDataFactory.createCustomTask("Task 1", "Desc", TaskProgress.IN_PROGRESS, TaskPriority.LOW, user);
+        user.setTasks(List.of(userTask));
         user.setPhoneNumber("+90 0000000");
         user.setRole(UserRole.ADMIN);
         return user;
