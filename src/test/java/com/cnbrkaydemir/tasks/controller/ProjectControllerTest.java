@@ -1,11 +1,17 @@
 package com.cnbrkaydemir.tasks.controller;
 
-import com.cnbrkaydemir.tasks.dto.CreateProjectDto;
-import com.cnbrkaydemir.tasks.dto.ProjectDto;
+import com.cnbrkaydemir.tasks.dto.*;
 import com.cnbrkaydemir.tasks.exception.GlobalExceptionHandler;
 import com.cnbrkaydemir.tasks.exception.notfound.ProjectNotFoundException;
+import com.cnbrkaydemir.tasks.exception.notfound.TeamNotFoundException;
+import com.cnbrkaydemir.tasks.factory.DepartmentTestDataFactory;
 import com.cnbrkaydemir.tasks.factory.ProjectTestDataFactory;
+import com.cnbrkaydemir.tasks.factory.TaskTestDataFactory;
+import com.cnbrkaydemir.tasks.factory.TeamTestDataFactory;
+import com.cnbrkaydemir.tasks.model.Department;
 import com.cnbrkaydemir.tasks.model.Project;
+import com.cnbrkaydemir.tasks.model.Task;
+import com.cnbrkaydemir.tasks.model.Team;
 import com.cnbrkaydemir.tasks.service.ProjectService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,6 +28,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -157,5 +164,115 @@ public class ProjectControllerTest {
                 .andExpect(status().isNotFound());
     }
 
+    @Test
+    void findProjectDepartment_ShouldReturnOk() throws Exception {
+        Department department = DepartmentTestDataFactory.createDefaultDepartment();
+        when(projectService.getDepartment(project.getId())).thenReturn(modelMapper.map(department, DepartmentDto.class));
+
+        String apiPath = BASE_PATH + "/v1/"+project.getId()+"/department";
+        mockMvc.perform(get(apiPath))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void findProjectDepartment_ShouldReturnNotFound() throws Exception {
+        UUID randomId = UUID.randomUUID();
+        when(projectService.getDepartment(randomId))
+                .thenThrow(new ProjectNotFoundException(randomId));
+
+        String apiPath = BASE_PATH + "/v1/"+randomId+"/department";
+        mockMvc.perform(get(apiPath))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void findProjectTeams_ShouldReturnOk() throws Exception {
+        Team teams = TeamTestDataFactory.createDefaultTeam();
+        when(projectService.getTeams(project.getId()))
+                .thenReturn(Stream.of(teams)
+                        .map(team -> modelMapper.map(team, TeamDto.class))
+                        .toList());
+
+        String apiPath = BASE_PATH + "/v1/"+project.getId()+"/teams";
+        mockMvc.perform(get(apiPath))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void findProjectTeams_ShouldReturnNotFound() throws Exception {
+        UUID randomId = UUID.randomUUID();
+        when(projectService.getTeams(randomId))
+                .thenThrow(new ProjectNotFoundException(randomId));
+
+        String apiPath = BASE_PATH + "/v1/"+randomId+"/teams";
+        mockMvc.perform(get(apiPath))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void findProjectTasks_ShouldReturnOk() throws Exception {
+        Task tasks = TaskTestDataFactory.createDefaultTask();
+        when(projectService.getTasks(project.getId()))
+                .thenReturn(Stream.of(tasks)
+                        .map(task-> modelMapper.map(task, TaskDto.class))
+                        .toList());
+
+        String apiPath = BASE_PATH + "/v1/"+project.getId()+"/tasks";
+        mockMvc.perform(get(apiPath))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void findProjectTasks_ShouldReturnNotFound() throws Exception {
+        UUID randomId = UUID.randomUUID();
+        when(projectService.getTasks(randomId))
+                .thenThrow(new ProjectNotFoundException(randomId));
+
+        String apiPath = BASE_PATH + "/v1/"+randomId+"/tasks";
+        mockMvc.perform(get(apiPath))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void addTeamToProject_ShouldReturnOk() throws Exception {
+        Team team = TeamTestDataFactory.createDefaultTeam();
+        when(projectService.addTeam(project.getId(), team.getId())).thenReturn(modelMapper.map(team, TeamDto.class));
+
+        String apiPath = BASE_PATH + "/v1/"+project.getId()+"/team/"+team.getId()+"/add";
+        mockMvc.perform(post(apiPath))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void addTeamToProject_ShouldReturnNotFound() throws Exception {
+        UUID randomId = UUID.randomUUID();
+        when(projectService.addTeam(project.getId(), randomId))
+                .thenThrow(new TeamNotFoundException(randomId));
+
+        String apiPath = BASE_PATH + "/v1/"+project.getId()+"/team/"+randomId+"/add";
+        mockMvc.perform(post(apiPath))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void discardTeamToProject_ShouldReturnOk() throws Exception {
+        Team team = TeamTestDataFactory.createDefaultTeam();
+        when(projectService.discardTeam(project.getId(), team.getId())).thenReturn(modelMapper.map(team, TeamDto.class));
+
+        String apiPath = BASE_PATH + "/v1/"+project.getId()+"/team/"+team.getId()+"/discard";
+        mockMvc.perform(post(apiPath))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void discardTeamToProject_ShouldReturnNotFound() throws Exception {
+        UUID randomId = UUID.randomUUID();
+        when(projectService.discardTeam(project.getId(), randomId))
+                .thenThrow(new TeamNotFoundException(randomId));
+
+        String apiPath = BASE_PATH + "/v1/"+project.getId()+"/team/"+randomId+"/discard";
+        mockMvc.perform(post(apiPath))
+                .andExpect(status().isNotFound());
+    }
 
 }
