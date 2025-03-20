@@ -5,6 +5,7 @@ import com.cnbrkaydemir.tasks.exception.notfound.DepartmentNotFoundException;
 import com.cnbrkaydemir.tasks.exception.notfound.TeamNotFoundException;
 import com.cnbrkaydemir.tasks.exception.notfound.UserNotFoundException;
 import com.cnbrkaydemir.tasks.exception.state.UserAlreadyInTeamException;
+import com.cnbrkaydemir.tasks.exception.state.UserNotInTeamException;
 import com.cnbrkaydemir.tasks.model.Department;
 import com.cnbrkaydemir.tasks.model.Project;
 import com.cnbrkaydemir.tasks.model.Team;
@@ -89,6 +90,19 @@ public class TeamServiceImpl implements TeamService {
         }
 
         team.getTeamMembers().add(user);
+        return modelMapper.map(teamRepository.save(team), TeamDto.class);
+    }
+
+    @Override
+    public TeamDto discardUserFromTeam(UUID teamId, UUID userId) throws TeamNotFoundException, UserNotFoundException, UserNotInTeamException {
+        Team team = teamRepository.findById(teamId).orElseThrow(() -> new TeamNotFoundException(teamId));
+        Users user = usersRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
+
+        if(!team.getTeamMembers().contains(user)) {
+            throw new UserNotInTeamException(user, team);
+        }
+
+        team.getTeamMembers().remove(user);
         return modelMapper.map(teamRepository.save(team), TeamDto.class);
     }
 

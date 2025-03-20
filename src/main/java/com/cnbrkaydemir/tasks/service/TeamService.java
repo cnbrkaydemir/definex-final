@@ -4,6 +4,7 @@ import com.cnbrkaydemir.tasks.dto.*;
 import com.cnbrkaydemir.tasks.exception.notfound.TeamNotFoundException;
 import com.cnbrkaydemir.tasks.exception.notfound.UserNotFoundException;
 import com.cnbrkaydemir.tasks.exception.state.UserAlreadyInTeamException;
+import com.cnbrkaydemir.tasks.exception.state.UserNotInTeamException;
 
 
 import java.util.List;
@@ -17,6 +18,7 @@ public interface TeamService {
     boolean deleteTeam(UUID id) throws TeamNotFoundException;
     List<UserDto> getTeamUsers(UUID id) throws TeamNotFoundException;
     TeamDto addUserToTeam(UUID teamId, UUID userId) throws TeamNotFoundException, UserNotFoundException, UserAlreadyInTeamException;
+    TeamDto discardUserFromTeam(UUID teamId, UUID userId) throws TeamNotFoundException, UserNotFoundException, UserNotInTeamException;
     DepartmentDto getTeamDepartment(UUID id) throws TeamNotFoundException;
     ProjectDto getTeamProject(UUID id) throws TeamNotFoundException;
 }

@@ -55,6 +55,11 @@ public class TeamController {
         return ResponseEntity.ok(teamService.addUserToTeam(teamId, userId));
     }
 
+    @PostMapping("/v1/{teamId}/user/{userId}/discard")
+    public ResponseEntity<TeamDto> discardUserFromTeam(@PathVariable UUID teamId, @PathVariable UUID userId){
+        return ResponseEntity.ok(teamService.discardUserFromTeam(teamId, userId));
+    }
+
     @GetMapping("/v1/{teamId}/department")
     public ResponseEntity<DepartmentDto> getDepartment(@PathVariable UUID teamId){
         return ResponseEntity.ok(teamService.getTeamDepartment(teamId));
