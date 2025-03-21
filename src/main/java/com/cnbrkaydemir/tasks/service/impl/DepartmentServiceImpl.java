@@ -6,6 +6,10 @@ import com.cnbrkaydemir.tasks.dto.TeamDto;
 import com.cnbrkaydemir.tasks.exception.notfound.DepartmentNotFoundException;
 import com.cnbrkaydemir.tasks.exception.notfound.ProjectNotFoundException;
 import com.cnbrkaydemir.tasks.exception.notfound.TeamNotFoundException;
+import com.cnbrkaydemir.tasks.exception.state.DepartmentAlreadyContainsProjectException;
+import com.cnbrkaydemir.tasks.exception.state.DepartmentAlreadyContainsTeamException;
+import com.cnbrkaydemir.tasks.exception.state.DepartmentDoesNotContainProjectException;
+import com.cnbrkaydemir.tasks.exception.state.DepartmentDoesNotContainTeamException;
 import com.cnbrkaydemir.tasks.model.Department;
 import com.cnbrkaydemir.tasks.model.Project;
 import com.cnbrkaydemir.tasks.model.Team;
@@ -90,7 +94,13 @@ public class DepartmentServiceImpl implements DepartmentService {
     public ProjectDto addProject(UUID departmentId, UUID projectId) throws DepartmentNotFoundException, ProjectNotFoundException {
         Department department = departmentRepository.findById(departmentId).orElseThrow(() -> new DepartmentNotFoundException(departmentId));
         Project project  = projectRepository.findById(projectId).orElseThrow(() -> new ProjectNotFoundException(projectId));
+
+        if (department.getProjects().contains(project)) {
+            throw new DepartmentAlreadyContainsProjectException(department.getName(), project.getName());
+        }
+
         department.getProjects().add(project);
+        departmentRepository.save(department);
         return modelMapper.map(project, ProjectDto.class);
     }
 
@@ -98,7 +108,13 @@ public class DepartmentServiceImpl implements DepartmentService {
     public ProjectDto discardProject(UUID departmentId, UUID projectId) throws DepartmentNotFoundException, ProjectNotFoundException {
         Department department = departmentRepository.findById(departmentId).orElseThrow(() -> new DepartmentNotFoundException(departmentId));
         Project project  = projectRepository.findById(projectId).orElseThrow(() -> new ProjectNotFoundException(projectId));
+
+        if (!department.getProjects().contains(project)) {
+            throw new DepartmentDoesNotContainProjectException(department.getName(), project.getName());
+        }
+
         department.getProjects().remove(project);
+        departmentRepository.save(department);
         return modelMapper.map(project, ProjectDto.class);
     }
 
@@ -106,7 +122,13 @@ public class DepartmentServiceImpl implements DepartmentService {
     public TeamDto addTeam(UUID departmentId, UUID teamId) throws DepartmentNotFoundException, TeamNotFoundException {
         Department department = departmentRepository.findById(departmentId).orElseThrow(() -> new DepartmentNotFoundException(departmentId));
         Team team = teamRepository.findById(teamId).orElseThrow(() -> new TeamNotFoundException(teamId));
+
+        if (department.getTeams().contains(team)) {
+            throw new DepartmentAlreadyContainsTeamException(department.getName(), team.getName());
+        }
+
         department.getTeams().add(team);
+        departmentRepository.save(department);
         return modelMapper.map(team, TeamDto.class);
     }
 
@@ -114,7 +136,13 @@ public class DepartmentServiceImpl implements DepartmentService {
     public TeamDto discardTeam(UUID departmentId, UUID teamId) throws DepartmentNotFoundException, TeamNotFoundException {
         Department department = departmentRepository.findById(departmentId).orElseThrow(() -> new DepartmentNotFoundException(departmentId));
         Team team = teamRepository.findById(teamId).orElseThrow(() -> new TeamNotFoundException(teamId));
+
+        if (!department.getTeams().contains(team)) {
+            throw new DepartmentDoesNotContainTeamException(department.getName(), team.getName());
+        }
+
         department.getTeams().add(team);
+        departmentRepository.save(department);
         return modelMapper.map(team, TeamDto.class);
     }
 }

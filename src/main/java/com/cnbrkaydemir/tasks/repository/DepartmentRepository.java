@@ -2,6 +2,7 @@ package com.cnbrkaydemir.tasks.repository;
 
 import com.cnbrkaydemir.tasks.model.Department;
 import com.cnbrkaydemir.tasks.model.Project;
+import com.cnbrkaydemir.tasks.model.Team;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -18,5 +19,5 @@ public interface DepartmentRepository extends BaseRepository<Department, UUID> {
 
     @Query("SELECT t FROM Team t WHERE t.department.id = :departmentId" +
             " AND t.department.deleted = false AND t.deleted = false")
-    List<Project> findActiveTeamsByDepartmentId(@Param("departmentId") UUID departmentId);
+    List<Team> findActiveTeamsByDepartmentId(@Param("departmentId") UUID departmentId);
 }

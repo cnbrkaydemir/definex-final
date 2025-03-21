@@ -1,7 +1,9 @@
 package com.cnbrkaydemir.tasks.factory;
 
+import com.cnbrkaydemir.tasks.dto.DepartmentDto;
 import com.cnbrkaydemir.tasks.model.Department;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -12,6 +14,8 @@ public class DepartmentTestDataFactory {
         department.setName("Default Department");
         department.setId(UUID.randomUUID());
         department.setDescription("Default Department Description");
+        department.setProjects(new ArrayList<>());
+        department.setTeams(new ArrayList<>());
         return department;
     }
 
@@ -21,5 +25,13 @@ public class DepartmentTestDataFactory {
         department.setDescription(description);
         department.setId(UUID.randomUUID());
         return department;
+    }
+
+    public static DepartmentDto dtoFromDepartment(Department department) {
+        DepartmentDto dto = new DepartmentDto();
+        dto.setId(department.getId());
+        dto.setName(department.getName());
+        dto.setDescription(department.getDescription());
+        return dto;
     }
 }
