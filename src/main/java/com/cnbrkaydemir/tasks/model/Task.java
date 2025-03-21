@@ -4,6 +4,7 @@ package com.cnbrkaydemir.tasks.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -45,9 +46,9 @@ public class Task extends BaseEntity{
     private Users assignee;
 
     @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<Comment> comments;
+    private List<Comment> comments = new ArrayList<>();
 
     @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<Attachment> attachments;
+    private List<Attachment> attachments = new ArrayList<>();
 
 }

@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -39,8 +40,8 @@ public class Project extends BaseEntity {
     private Department department;
 
     @OneToMany(mappedBy = "project", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Team> teams;
+    private List<Team> teams = new ArrayList<>();
 
     @OneToMany(mappedBy = "project")
-    private List<Task> tasks;
+    private List<Task> tasks = new ArrayList<>();
 }

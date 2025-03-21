@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -37,6 +38,6 @@ public class Team extends BaseEntity {
             name = "team_members",
             joinColumns = @JoinColumn(name = "team_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id"))
-    private List<Users> teamMembers;
+    private List<Users> teamMembers = new ArrayList<>();
 
 }

@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -37,12 +38,11 @@ public class Users extends BaseEntity {
     private UserRole role;
 
     @ManyToMany(mappedBy = "teamMembers")
-    private List<Team> teams;
+    private List<Team> teams = new ArrayList<>();
 
     @OneToMany(mappedBy = "assignee", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<Task> tasks;
+    private List<Task> tasks = new ArrayList<>();
 
     @OneToMany(mappedBy = "commentedBy", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<Comment> comments;
-
+    private List<Comment> comments = new ArrayList<>();
 }
