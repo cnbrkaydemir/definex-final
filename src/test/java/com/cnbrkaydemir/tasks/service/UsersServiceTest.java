@@ -296,7 +296,4 @@ public class UsersServiceTest {
         when(usersRepository.findById(randomID)).thenReturn(Optional.empty());
         assertThrows(UserNotFoundException.class, () -> usersService.getUserProjects(randomID));
     }
-
-
-
 }

@@ -1,5 +1,6 @@
 package com.cnbrkaydemir.tasks.factory;
 
+import com.cnbrkaydemir.tasks.dto.AttachmentDto;
 import com.cnbrkaydemir.tasks.model.Attachment;
 
 import java.util.Date;
@@ -14,5 +15,14 @@ public class AttachmentTestDataFactory {
         attachment.setCreatedDate(new Date());
         attachment.setType("image/jpeg");
         return attachment;
+    }
+
+    public static AttachmentDto dtoFromAttachment(Attachment attachment) {
+        AttachmentDto attachmentDto = new AttachmentDto();
+        attachmentDto.setId(attachment.getId());
+        attachmentDto.setName(attachment.getName());
+        attachmentDto.setCreatedDate(attachment.getCreatedDate());
+        attachmentDto.setType(attachment.getType());
+        return attachmentDto;
     }
 }
