@@ -1,6 +1,7 @@
 package com.cnbrkaydemir.tasks.factory;
 
 
+import com.cnbrkaydemir.tasks.dto.ProjectDto;
 import com.cnbrkaydemir.tasks.model.Project;
 
 import java.util.UUID;
@@ -22,5 +23,13 @@ public class ProjectTestDataFactory {
         project.setDescription(description);
         project.setDepartment(DepartmentTestDataFactory.createDefaultDepartment());
         return project;
+    }
+
+    public static ProjectDto dtoFromProject(Project project){
+        ProjectDto projectDto = new ProjectDto();
+        projectDto.setId(project.getId());
+        projectDto.setName(project.getName());
+        projectDto.setDescription(project.getDescription());
+        return projectDto;
     }
 }

@@ -2,6 +2,7 @@ package com.cnbrkaydemir.tasks.service.impl;
 
 import com.cnbrkaydemir.tasks.dto.*;
 import com.cnbrkaydemir.tasks.exception.notfound.UserNotFoundException;
+import com.cnbrkaydemir.tasks.exception.state.EmailAlreadyExistsException;
 import com.cnbrkaydemir.tasks.model.Users;
 import com.cnbrkaydemir.tasks.repository.UsersRepository;
 import com.cnbrkaydemir.tasks.service.UsersService;
@@ -39,9 +40,12 @@ public class UsersServiceImpl implements UsersService {
 
     @Override
     public UserDto create(Users user) {
+        if (usersRepository.findByEmail(user.getEmail()).isPresent()) {
+          throw new EmailAlreadyExistsException(user.getEmail());
+        }
+
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setDeleted(false);
-
         Users savedUser = usersRepository.save(user);
         return modelMapper.map(savedUser, UserDto.class);
     }

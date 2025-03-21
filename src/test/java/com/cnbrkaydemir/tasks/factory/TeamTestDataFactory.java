@@ -1,5 +1,6 @@
 package com.cnbrkaydemir.tasks.factory;
 
+import com.cnbrkaydemir.tasks.dto.TeamDto;
 import com.cnbrkaydemir.tasks.model.Team;
 
 import java.util.UUID;
@@ -25,5 +26,11 @@ public class TeamTestDataFactory {
         return team;
     }
 
-
+    public static TeamDto createDtoFromTeam(Team team) {
+        TeamDto teamDto = new TeamDto();
+        teamDto.setId(team.getId());
+        teamDto.setName(team.getName());
+        teamDto.setGoal(team.getGoal());
+        return teamDto;
+    }
 }

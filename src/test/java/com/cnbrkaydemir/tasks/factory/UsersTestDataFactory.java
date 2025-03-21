@@ -34,4 +34,16 @@ public class UsersTestDataFactory {
         return user;
     }
 
+    public static Users createDefaultUserWithoutTask(){
+        Users user = new Users();
+        user.setId(UUID.randomUUID());
+        user.setFirstName("John");
+        user.setLastName("Doe");
+        user.setEmail("john@doe.com");
+        user.setPassword("password");
+        user.setPhoneNumber("+90 0000000");
+        user.setRole(UserRole.ADMIN);
+        return user;
+    }
+
 }

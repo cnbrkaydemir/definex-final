@@ -1,5 +1,6 @@
 package com.cnbrkaydemir.tasks.factory;
 
+import com.cnbrkaydemir.tasks.dto.TaskDto;
 import com.cnbrkaydemir.tasks.model.*;
 
 import java.util.UUID;
@@ -27,5 +28,13 @@ public class TaskTestDataFactory {
         task.setProgress(progress);
         task.setPriority(priority);
         return task;
+    }
+
+    public static TaskDto dtoFromTask(Task task){
+        TaskDto dto = new TaskDto();
+        dto.setId(task.getId());
+        dto.setName(task.getName());
+        dto.setDescription(task.getDescription());
+        return dto;
     }
 }
