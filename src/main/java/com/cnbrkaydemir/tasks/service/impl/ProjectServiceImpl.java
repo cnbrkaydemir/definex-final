@@ -4,6 +4,7 @@ import com.cnbrkaydemir.tasks.dto.*;
 import com.cnbrkaydemir.tasks.exception.notfound.DepartmentNotFoundException;
 import com.cnbrkaydemir.tasks.exception.notfound.ProjectNotFoundException;
 import com.cnbrkaydemir.tasks.exception.notfound.TeamNotFoundException;
+import com.cnbrkaydemir.tasks.exception.state.ProjectAlreadyContainsTeamException;
 import com.cnbrkaydemir.tasks.exception.state.ProjectDoesNotIncludeTeamException;
 import com.cnbrkaydemir.tasks.model.Department;
 import com.cnbrkaydemir.tasks.model.Project;
@@ -90,6 +91,11 @@ public class ProjectServiceImpl implements ProjectService {
     public TeamDto addTeam(UUID projectId, UUID teamID) throws ProjectNotFoundException, TeamNotFoundException {
         Project project = projectRepository.findById(projectId).orElseThrow(() -> new ProjectNotFoundException(projectId));
         Team team = teamRepository.findById(teamID).orElseThrow(() -> new TeamNotFoundException(teamID));
+
+        if(project.getTeams().contains(team)) {
+            throw new ProjectAlreadyContainsTeamException(project.getName(), team.getName());
+        }
+
         project.getTeams().add(team);
         projectRepository.save(project);
         return modelMapper.map(team, TeamDto.class);
@@ -105,7 +111,6 @@ public class ProjectServiceImpl implements ProjectService {
         }
 
         project.getTeams().remove(team);
-
         return modelMapper.map(team, TeamDto.class);
     }
 
