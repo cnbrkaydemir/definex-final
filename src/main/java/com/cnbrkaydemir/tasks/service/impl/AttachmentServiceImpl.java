@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.*;
@@ -30,17 +31,20 @@ public class AttachmentServiceImpl implements AttachmentService {
     private final ModelMapper modelMapper;
 
     @Override
+    @Transactional(readOnly = true)
     public Resource getAttachmentAsResource(UUID id) throws AttachmentNotFoundException {
         Attachment attachment = attachmentRepository.findById(id).orElseThrow(()->new AttachmentNotFoundException(id));
         return fileService.loadAsResource(attachment.getName());
     }
 
     @Override
+    @Transactional(readOnly = true)
     public AttachmentDto getAttachment(UUID id) throws AttachmentNotFoundException {
         return modelMapper.map(attachmentRepository.findById(id), AttachmentDto.class);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Resource> getAllAttachmentsAsResource() {
         return attachmentRepository.findAll()
                 .stream()
@@ -49,6 +53,7 @@ public class AttachmentServiceImpl implements AttachmentService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<AttachmentDto> getAllAttachments() {
         return attachmentRepository.findAll()
                 .stream()
@@ -57,6 +62,7 @@ public class AttachmentServiceImpl implements AttachmentService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public boolean deleteAttachment(UUID id) throws AttachmentNotFoundException {
         Attachment attachment = attachmentRepository.findById(id).orElseThrow(()->new AttachmentNotFoundException(id));
         fileService.delete(attachment.getName());
@@ -66,6 +72,7 @@ public class AttachmentServiceImpl implements AttachmentService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public AttachmentDto createAttachment(UUID taskId, MultipartFile file) {
         Task task = taskRepository.findById(taskId).orElseThrow(()->new TaskNotFoundException(taskId));
 

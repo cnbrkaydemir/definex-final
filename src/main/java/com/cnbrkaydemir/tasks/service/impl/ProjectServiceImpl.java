@@ -16,6 +16,7 @@ import com.cnbrkaydemir.tasks.service.ProjectService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -33,12 +34,14 @@ public class ProjectServiceImpl implements ProjectService {
     private final ModelMapper modelMapper;
 
     @Override
+    @Transactional(readOnly = true)
     public ProjectDto getProject(UUID id) throws ProjectNotFoundException {
         Project project = projectRepository.findById(id).orElseThrow(() -> new ProjectNotFoundException(id));
         return modelMapper.map(project, ProjectDto.class);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<ProjectDto> getProjects() {
         return projectRepository.findAll()
                 .stream()
@@ -47,6 +50,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public ProjectDto createProject(CreateProjectDto projectDto) {
         Project project = modelMapper.map(projectDto, Project.class);
         Department department = departmentRepository.findById(projectDto.getDepartmentId())
@@ -57,6 +61,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public boolean deleteProject(UUID id) throws ProjectNotFoundException {
         Project project = projectRepository.findById(id).orElseThrow(() -> new ProjectNotFoundException(id));
         project.setDeleted(true);
@@ -65,6 +70,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public ProjectDto updateProject(UUID id, ProjectDto project) throws ProjectNotFoundException {
         Project updatedProject = projectRepository.findById(id).orElseThrow(() -> new ProjectNotFoundException(id));
         modelMapper.map(project, updatedProject);
@@ -72,6 +78,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public DepartmentDto getDepartment(UUID id) throws ProjectNotFoundException {
         Project project = projectRepository.findById(id).orElseThrow(() -> new ProjectNotFoundException(id));
         Department department = projectRepository.findActiveDepartmentByProjectId(project.getId());
@@ -79,6 +86,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<TeamDto> getTeams(UUID id) throws ProjectNotFoundException {
         Project project = projectRepository.findById(id).orElseThrow(() -> new ProjectNotFoundException(id));
         return projectRepository.findActiveTeamsByProjectId(project.getId())
@@ -88,6 +96,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public TeamDto addTeam(UUID projectId, UUID teamID) throws ProjectNotFoundException, TeamNotFoundException {
         Project project = projectRepository.findById(projectId).orElseThrow(() -> new ProjectNotFoundException(projectId));
         Team team = teamRepository.findById(teamID).orElseThrow(() -> new TeamNotFoundException(teamID));
@@ -102,6 +111,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public TeamDto discardTeam(UUID projectId, UUID teamID) throws ProjectNotFoundException, TeamNotFoundException, ProjectDoesNotIncludeTeamException {
         Project project = projectRepository.findById(projectId).orElseThrow(() -> new ProjectNotFoundException(projectId));
         Team team = teamRepository.findById(teamID).orElseThrow(() -> new TeamNotFoundException(teamID));
@@ -115,6 +125,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<TaskDto> getTasks(UUID id) throws ProjectNotFoundException {
         Project project = projectRepository.findById(id).orElseThrow(() -> new ProjectNotFoundException(id));
         return projectRepository.findActiveTasksByProjectId(project.getId())

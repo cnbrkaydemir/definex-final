@@ -17,6 +17,7 @@ import com.cnbrkaydemir.tasks.service.TeamService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -34,12 +35,14 @@ public class TeamServiceImpl implements TeamService {
     private final ModelMapper modelMapper;
 
     @Override
+    @Transactional(readOnly = true)
     public TeamDto getTeamById(UUID id) throws TeamNotFoundException {
         Team team = teamRepository.findById(id).orElseThrow(() -> new TeamNotFoundException(id));
         return modelMapper.map(team, TeamDto.class);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<TeamDto> getAllTeams() {
         return teamRepository.findAll()
                 .stream()
@@ -48,6 +51,7 @@ public class TeamServiceImpl implements TeamService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public TeamDto createTeam(CreateTeamDto teamDto) {
         Department department = departmentRepository.findById(teamDto.getDepartment()).orElseThrow(() -> new DepartmentNotFoundException(teamDto.getDepartment()));
         Team team = modelMapper.map(teamDto, Team.class);
@@ -57,6 +61,7 @@ public class TeamServiceImpl implements TeamService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public TeamDto updateTeam(UUID id, TeamDto team) throws TeamNotFoundException {
         Team oldTeam = teamRepository.findById(id).orElseThrow(() -> new TeamNotFoundException(id));
         modelMapper.map(team, oldTeam);
@@ -64,6 +69,7 @@ public class TeamServiceImpl implements TeamService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public boolean deleteTeam(UUID id) throws TeamNotFoundException {
         Team team = teamRepository.findById(id).orElseThrow(() -> new TeamNotFoundException(id));
         team.setDeleted(true);
@@ -72,6 +78,7 @@ public class TeamServiceImpl implements TeamService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<UserDto> getTeamUsers(UUID id) throws TeamNotFoundException {
         Team team = teamRepository.findById(id).orElseThrow(()->new TeamNotFoundException(id));
         return teamRepository.findActiveUsersByTeamId(team.getId())
@@ -81,6 +88,7 @@ public class TeamServiceImpl implements TeamService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public TeamDto addUserToTeam(UUID teamId, UUID userId) throws TeamNotFoundException, UserNotFoundException, UserAlreadyInTeamException {
         Team team = teamRepository.findById(teamId).orElseThrow(() -> new TeamNotFoundException(teamId));
         Users user = usersRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
@@ -94,6 +102,7 @@ public class TeamServiceImpl implements TeamService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public TeamDto discardUserFromTeam(UUID teamId, UUID userId) throws TeamNotFoundException, UserNotFoundException, UserNotInTeamException {
         Team team = teamRepository.findById(teamId).orElseThrow(() -> new TeamNotFoundException(teamId));
         Users user = usersRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
@@ -107,6 +116,7 @@ public class TeamServiceImpl implements TeamService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public DepartmentDto getTeamDepartment(UUID id) throws TeamNotFoundException {
         Team team = teamRepository.findById(id).orElseThrow(() -> new TeamNotFoundException(id));
         Department teamDepartment = teamRepository.findActiveDepartmentByTeamId(team.getId());
@@ -114,6 +124,7 @@ public class TeamServiceImpl implements TeamService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ProjectDto getTeamProject(UUID id) throws TeamNotFoundException {
         Team team = teamRepository.findById(id).orElseThrow(() -> new TeamNotFoundException(id));
         Project teamProject = teamRepository.findActiveProjectByTeamId(team.getId());

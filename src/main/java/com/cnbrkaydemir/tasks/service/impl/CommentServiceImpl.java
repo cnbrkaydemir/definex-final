@@ -15,6 +15,7 @@ import com.cnbrkaydemir.tasks.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -32,6 +33,7 @@ public class CommentServiceImpl implements CommentService {
     private final ModelMapper modelMapper;
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public CommentDto createComment(CreateCommentDto commentDto) {
         Users user =  usersRepository.findById(commentDto.getUserId()).orElseThrow(()->new UserNotFoundException(commentDto.getUserId()));
         Task task = taskRepository.findById(commentDto.getTaskId()).orElseThrow(()->new TaskNotFoundException(commentDto.getTaskId()));
@@ -43,12 +45,14 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public CommentDto getComment(UUID id) throws CommentNotFoundException {
         Comment comment = commentRepository.findById(id).orElseThrow(()->new CommentNotFoundException(id));
         return modelMapper.map(comment, CommentDto.class);
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public CommentDto updateComment(UUID id, CommentDto comment) throws CommentNotFoundException {
         Comment oldComment = commentRepository.findById(id).orElseThrow(()->new CommentNotFoundException(id));
         modelMapper.map(comment, oldComment);
@@ -56,6 +60,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public boolean deleteComment(UUID id) throws CommentNotFoundException {
         Comment comment = commentRepository.findById(id).orElseThrow(()->new CommentNotFoundException(id));
         comment.setDeleted(true);
@@ -64,6 +69,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<CommentDto> getAllComments() {
         return commentRepository.findAll()
                 .stream()

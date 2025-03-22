@@ -20,6 +20,7 @@ import com.cnbrkaydemir.tasks.service.DepartmentService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -37,12 +38,14 @@ public class DepartmentServiceImpl implements DepartmentService {
     private final ModelMapper modelMapper;
 
     @Override
+    @Transactional(readOnly = true)
     public DepartmentDto getDepartmentById(UUID id) throws DepartmentNotFoundException {
         Department targetDepartment = departmentRepository.findById(id).orElseThrow(() -> new DepartmentNotFoundException(id));
         return modelMapper.map(targetDepartment, DepartmentDto.class);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<DepartmentDto> getAllDepartments() {
         return departmentRepository.findAll()
                 .stream()
@@ -51,6 +54,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public DepartmentDto createDepartment(DepartmentDto departmentDto) {
         Department targetDepartment = modelMapper.map(departmentDto, Department.class);
         targetDepartment.setDeleted(false);
@@ -58,6 +62,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public DepartmentDto updateDepartment(UUID id, DepartmentDto department) throws DepartmentNotFoundException {
         Department oldDepartment = departmentRepository.findById(id).orElseThrow(() -> new DepartmentNotFoundException(id));
         modelMapper.map(department, oldDepartment);
@@ -65,6 +70,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public boolean deleteDepartment(UUID id) throws DepartmentNotFoundException {
         Department targetDepartment = departmentRepository.findById(id).orElseThrow(() -> new DepartmentNotFoundException(id));
         targetDepartment.setDeleted(true);
@@ -73,6 +79,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<TeamDto> getTeamsByDepartment(UUID id) {
         Department department = departmentRepository.findById(id).orElseThrow(() -> new DepartmentNotFoundException(id));
         return departmentRepository.findActiveTeamsByDepartmentId(department.getId())
@@ -82,6 +89,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<ProjectDto> getProjectsByDepartment(UUID id) {
         Department department = departmentRepository.findById(id).orElseThrow(() -> new DepartmentNotFoundException(id));
         return departmentRepository.findActiveProjectsByDepartmentId(department.getId())
@@ -91,6 +99,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public ProjectDto addProject(UUID departmentId, UUID projectId) throws DepartmentNotFoundException, ProjectNotFoundException {
         Department department = departmentRepository.findById(departmentId).orElseThrow(() -> new DepartmentNotFoundException(departmentId));
         Project project  = projectRepository.findById(projectId).orElseThrow(() -> new ProjectNotFoundException(projectId));
@@ -105,6 +114,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public ProjectDto discardProject(UUID departmentId, UUID projectId) throws DepartmentNotFoundException, ProjectNotFoundException {
         Department department = departmentRepository.findById(departmentId).orElseThrow(() -> new DepartmentNotFoundException(departmentId));
         Project project  = projectRepository.findById(projectId).orElseThrow(() -> new ProjectNotFoundException(projectId));
@@ -119,6 +129,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public TeamDto addTeam(UUID departmentId, UUID teamId) throws DepartmentNotFoundException, TeamNotFoundException {
         Department department = departmentRepository.findById(departmentId).orElseThrow(() -> new DepartmentNotFoundException(departmentId));
         Team team = teamRepository.findById(teamId).orElseThrow(() -> new TeamNotFoundException(teamId));
@@ -133,6 +144,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public TeamDto discardTeam(UUID departmentId, UUID teamId) throws DepartmentNotFoundException, TeamNotFoundException {
         Department department = departmentRepository.findById(departmentId).orElseThrow(() -> new DepartmentNotFoundException(departmentId));
         Team team = teamRepository.findById(teamId).orElseThrow(() -> new TeamNotFoundException(teamId));

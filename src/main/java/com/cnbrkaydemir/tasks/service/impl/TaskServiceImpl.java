@@ -15,6 +15,7 @@ import com.cnbrkaydemir.tasks.service.TaskService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -34,12 +35,14 @@ public class TaskServiceImpl implements TaskService {
     private final ModelMapper modelMapper;
 
     @Override
+    @Transactional(readOnly = true)
     public TaskDto getTask(UUID id) throws TaskNotFoundException {
         Task targetTask = taskRepository.findById(id).orElseThrow(()-> new TaskNotFoundException(id));
         return modelMapper.map(targetTask, TaskDto.class);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<TaskDto> getTasks() {
         return taskRepository.findAll()
                 .stream()
@@ -48,6 +51,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public TaskDto createTask(CreateTaskDto taskDto) throws UserNotFoundException, TeamNotFoundException {
         Users user = userRepository.findById(taskDto.getUserId()).orElseThrow(()-> new UserNotFoundException(taskDto.getUserId()));
         Project project = projectRepository.findById(taskDto.getProjectId()).orElseThrow(()-> new ProjectNotFoundException(taskDto.getProjectId()));
@@ -62,6 +66,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public boolean deleteTask(UUID id) throws TaskNotFoundException {
         Task targetTask = taskRepository.findById(id).orElseThrow(()-> new TaskNotFoundException(id));
         targetTask.setDeleted(true);
@@ -70,6 +75,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public TaskDto updateTask(UUID id, TaskDto task) throws TaskNotFoundException {
         Task oldTask = taskRepository.findById(id).orElseThrow(()-> new TaskNotFoundException(id));
 
@@ -81,6 +87,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public UserDto getTaskAssignee(UUID id) throws TaskNotFoundException {
         Task task = taskRepository.findById(id).orElseThrow(()-> new TaskNotFoundException(id));
         Users targetUser = taskRepository.findActiveUserByTaskId(task.getId());
@@ -88,6 +95,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ProjectDto getTaskProject(UUID id) throws TaskNotFoundException {
         Task task = taskRepository.findById(id).orElseThrow(()-> new TaskNotFoundException(id));
         Project project = taskRepository.findActiveProjectByTaskId(task.getId());
@@ -95,6 +103,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public TaskDto updateTaskPriority(UUID id, TaskPriority priority) throws TaskNotFoundException {
         Task task = taskRepository.findById(id).orElseThrow(()-> new TaskNotFoundException(id));
         task.setPriority(priority);
@@ -102,6 +111,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public TaskDto updateTaskProgress(UUID id, UpdateTaskProgressDto progressDto) throws TaskNotFoundException {
         Task task = taskRepository.findById(id).orElseThrow(()-> new TaskNotFoundException(id));
         taskProgressValidationService.validateTransition(task.getProgress(), progressDto.getProgress());
@@ -111,6 +121,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<CommentDto> getTaskComments(UUID id) throws TaskNotFoundException {
         Task task = taskRepository.findById(id).orElseThrow(()-> new TaskNotFoundException(id));
         return taskRepository.findActiveCommentsByTaskId(task.getId())
@@ -120,6 +131,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<AttachmentDto> getTaskAttachments(UUID id) throws TaskNotFoundException {
         Task task = taskRepository.findById(id).orElseThrow(()-> new TaskNotFoundException(id));
         return taskRepository.findActiveAttachmentsByTaskId(task.getId())
@@ -129,6 +141,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public TaskDto assignToUser(UUID taskId, UUID userId) throws TaskNotFoundException, TaskAlreadyAssignedException {
         Task task = taskRepository.findById(taskId).orElseThrow(()-> new TaskNotFoundException(taskId));
         Users user = userRepository.findById(userId).orElseThrow(()-> new UserNotFoundException(userId));

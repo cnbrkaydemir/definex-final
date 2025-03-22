@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -25,12 +26,14 @@ public class UsersServiceImpl implements UsersService {
     private final PasswordEncoder passwordEncoder;
 
     @Override
+    @Transactional(readOnly = true)
     public UserDto get(UUID id) throws UserNotFoundException {
         Users targetUser = usersRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
         return modelMapper.map(targetUser, UserDto.class);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<UserDto> getAll() {
         return usersRepository.findAll()
                 .stream()
@@ -39,6 +42,7 @@ public class UsersServiceImpl implements UsersService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public UserDto create(Users user) {
         if (usersRepository.findByEmail(user.getEmail()).isPresent()) {
           throw new EmailAlreadyExistsException(user.getEmail());
@@ -51,6 +55,7 @@ public class UsersServiceImpl implements UsersService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public UserDto update(UUID id, UserDto user) throws UserNotFoundException {
         Users oldUser = usersRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
         modelMapper.map(user, oldUser);
@@ -58,6 +63,7 @@ public class UsersServiceImpl implements UsersService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public boolean delete(UUID id) throws UserNotFoundException {
         Users targetUser = usersRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
         targetUser.setDeleted(true);
@@ -66,6 +72,7 @@ public class UsersServiceImpl implements UsersService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<TaskDto> getUserTasks(UUID id) {
         Users targetUser = usersRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
         return usersRepository.findActiveTasksByUserId(targetUser.getId())
@@ -75,6 +82,7 @@ public class UsersServiceImpl implements UsersService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<TeamDto> getUserTeams(UUID id) {
         Users targetUser = usersRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
         return usersRepository.findActiveTeamsByUserId(targetUser.getId())
@@ -84,6 +92,7 @@ public class UsersServiceImpl implements UsersService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<CommentDto> getUserComments(UUID id) {
         Users targetUser = usersRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
         return usersRepository.findActiveCommentsByUserId(targetUser.getId())
@@ -93,6 +102,7 @@ public class UsersServiceImpl implements UsersService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<ProjectDto> getUserProjects(UUID id) {
         Users targetUser = usersRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
         return usersRepository.findActiveProjectsByUserId(targetUser.getId())
