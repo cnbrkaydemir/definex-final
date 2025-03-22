@@ -60,7 +60,7 @@ public class CommentServiceImpl implements CommentService {
         Comment comment = commentRepository.findById(id).orElseThrow(()->new CommentNotFoundException(id));
         comment.setDeleted(true);
         commentRepository.save(comment);
-        return false;
+        return true;
     }
 
     @Override
