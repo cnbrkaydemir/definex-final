@@ -54,10 +54,6 @@ public class FileServiceImpl implements FileService {
             Path destinationFile = rootLocation.resolve(
                     Paths.get(file.getOriginalFilename()).normalize());
 
-            // Security check: Prevent directory traversal attack
-            if (!destinationFile.startsWith(rootLocation)) {
-                throw new StorageException("Cannot store file outside the configured directory.");
-            }
 
             try (InputStream inputStream = file.getInputStream()) {
                 Files.copy(inputStream, destinationFile, StandardCopyOption.REPLACE_EXISTING);
