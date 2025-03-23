@@ -44,7 +44,7 @@ Before running the application, you need to create a .env file and configure the
 ```ruby
 touch .env
 ```
-* Open the .env file and set the necessary variables:
+* Create a .env file and set the necessary variables:
 ```ruby
 DB_USER=your_user_name
 DB_PASSWORD=your_password
