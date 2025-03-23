@@ -1,0 +1,1325 @@
+{
+	"info": {
+		"_postman_id": "a7f25bbd-f434-42ff-963f-f29cf0c47a98",
+		"name": "Tasks",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "17572492"
+	},
+	"item": [
+		{
+			"name": "Attachments",
+			"item": [
+				{
+					"name": "Get All Attachments",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{attachments}}",
+							"host": [
+								"{{attachments}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Attachment",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{attachments}}/1",
+							"host": [
+								"{{attachments}}"
+							],
+							"path": [
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Attachment",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/C:/Users/user/Downloads/event_logo.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{attachments}}/020a96f6-318e-49fe-82c3-1011bb65c748",
+							"host": [
+								"{{attachments}}"
+							],
+							"path": [
+								"020a96f6-318e-49fe-82c3-1011bb65c748"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Attachment",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{attachments}}/1",
+							"host": [
+								"{{attachments}}"
+							],
+							"path": [
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Comments",
+			"item": [
+				{
+					"name": "Get All comments",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{comments}}",
+							"host": [
+								"{{comments}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Comment",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{comments}}/1",
+							"host": [
+								"{{comments}}"
+							],
+							"path": [
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Comment",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{comments}}",
+							"host": [
+								"{{comments}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Comment",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "{{attachments}}/1",
+							"host": [
+								"{{attachments}}"
+							],
+							"path": [
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Comment",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{comments}}/1",
+							"host": [
+								"{{comments}}"
+							],
+							"path": [
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Departments",
+			"item": [
+				{
+					"name": "Get All Departments",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJraWQiOiI0YmNlYWYzMi00YTczLTQ2OGItYjY5Zi0wZTA1NmJkZGQzMTQiLCJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJzZWxmIiwic3ViIjoiY25icmtheWRlbWlyQGdtYWlsLmNvbSIsImlhdCI6MTc0MjQwNTQxOSwiYXV0aG9yaXRpZXMiOlsiVEVBTV9NRU1CRVIiXX0.YUXe3qHPZGIeq0ONmLlwdG4BcoL1mmJL6JSJwtihHyhBfWy6lf6miwj79sZGgcarsMmN88y19RkYBafbx7rQFnt0AKvJVPZTRttRmAf9yhcg0bEMR5_0FOhr7cR0WUQJIIVYI_WhrMmYOKjPDv9kzAnhIsAI-EJyNKYEsJyQ_2qu3EIArQ3l5t5xShdzBfWbh3aPJtMG2X3byqNT6O-jPJwyRpVHTNFo6HHK0fKrSpnQCYeMjVPpInD-PuJs8JMHPZB7pY7sz2q7JnnpVEGYf07xHz5IVeKAO9GYg7UL2DJ9jjGOCWqlJyBdznoTeiUCDIDapDqv41PdWAwl1gmLog",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{departments}}",
+							"host": [
+								"{{departments}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Department",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{departments}}/a209436c-348d-4f74-a674-7739b9f90d7c",
+							"host": [
+								"{{departments}}"
+							],
+							"path": [
+								"a209436c-348d-4f74-a674-7739b9f90d7c"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Department",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"IOS Project Development\",\r\n    \"description\": \"We Develop IOS Projects\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{departments}}",
+							"host": [
+								"{{departments}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Department",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJraWQiOiI0YmNlYWYzMi00YTczLTQ2OGItYjY5Zi0wZTA1NmJkZGQzMTQiLCJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJzZWxmIiwic3ViIjoiY25icmtheWRlbWlyQGdtYWlsLmNvbSIsImlhdCI6MTc0MjQwNTQxOSwiYXV0aG9yaXRpZXMiOlsiVEVBTV9NRU1CRVIiXX0.YUXe3qHPZGIeq0ONmLlwdG4BcoL1mmJL6JSJwtihHyhBfWy6lf6miwj79sZGgcarsMmN88y19RkYBafbx7rQFnt0AKvJVPZTRttRmAf9yhcg0bEMR5_0FOhr7cR0WUQJIIVYI_WhrMmYOKjPDv9kzAnhIsAI-EJyNKYEsJyQ_2qu3EIArQ3l5t5xShdzBfWbh3aPJtMG2X3byqNT6O-jPJwyRpVHTNFo6HHK0fKrSpnQCYeMjVPpInD-PuJs8JMHPZB7pY7sz2q7JnnpVEGYf07xHz5IVeKAO9GYg7UL2DJ9jjGOCWqlJyBdznoTeiUCDIDapDqv41PdWAwl1gmLog",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"description\":\"We develop not so robust android applications\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{departments}}/d2ddfd4e-5def-428b-90cd-4f459c95cf1e",
+							"host": [
+								"{{departments}}"
+							],
+							"path": [
+								"d2ddfd4e-5def-428b-90cd-4f459c95cf1e"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Department",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{departments}}/a209436c-348d-4f74-a674-7739b9f90d7c",
+							"host": [
+								"{{departments}}"
+							],
+							"path": [
+								"a209436c-348d-4f74-a674-7739b9f90d7c"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Department Teams",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{departments}}/1/teams",
+							"host": [
+								"{{departments}}"
+							],
+							"path": [
+								"1",
+								"teams"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Department Projects",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{departments}}/d2ddfd4e-5def-428b-90cd-4f459c95cf1e/projects",
+							"host": [
+								"{{departments}}"
+							],
+							"path": [
+								"d2ddfd4e-5def-428b-90cd-4f459c95cf1e",
+								"projects"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Team",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{departments}}/1/team/1/add",
+							"host": [
+								"{{departments}}"
+							],
+							"path": [
+								"1",
+								"team",
+								"1",
+								"add"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Discard Team",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{departments}}/1/team/1/discard",
+							"host": [
+								"{{departments}}"
+							],
+							"path": [
+								"1",
+								"team",
+								"1",
+								"discard"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Project",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJraWQiOiI5MTczZjE0Yy03MjkwLTQxNDctODRhMy01OGFiZDA1MGJmNTYiLCJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJzZWxmIiwic3ViIjoiY25icmtheWRlbWlycmFAZ21haWwuY29tIiwiaWF0IjoxNzQyMzk5NDE5LCJhdXRob3JpdGllcyI6IlRFQU1fTUVNQkVSIn0.dLGE0330_TgupAKYnDPZc52X_Taaf_k_M5dTEvrwkrwMe7aBntJ6xY-th2dFAMFoCIjLMiV2QAKYaAyqZ6heTsJUXoP8x9m2X3EFXT9Dqgtj4jY-tKGhIaEHX0sfFy6u17tX8vpTpjcK18Tz0xV5K8JQH2oAxn1N9fgUiLj-PF9io1idW4EjDaU5QCrQ38Ckp02FhQE7h4mOVorC-1hvEzOnZw9i0aIW20bDiUFPR3z9g_6FebFXKk1eeMw9M96gVDIYXP4PVe510fOtdwUzMoXl-c14ia_QRC5w5oeJWJgN0exl2MiusHYPsS55UMDOLUbCboNk69BFngMio9N8_w",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{departments}}/1/project/1/add",
+							"host": [
+								"{{departments}}"
+							],
+							"path": [
+								"1",
+								"project",
+								"1",
+								"add"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Discard Project",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{departments}}/1/project/1/discard",
+							"host": [
+								"{{departments}}"
+							],
+							"path": [
+								"1",
+								"project",
+								"1",
+								"discard"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Projects",
+			"item": [
+				{
+					"name": "Get Projects",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{projects}}",
+							"host": [
+								"{{projects}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Project",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{projects}}/1",
+							"host": [
+								"{{projects}}"
+							],
+							"path": [
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Project",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \r\n    \"name\":\"Technarts Application\",\r\n    \"description\":\"Renovation of Technarts.\",\r\n    \"startDate\": \"2025-03-18T12:00:00Z\",\r\n    \"dueDate\": \"2025-03-25T12:00:00Z\",\r\n    \"status\":\"IN_PROGRESS\",\r\n    \"departmentId\": \"d2ddfd4e-5def-428b-90cd-4f459c95cf1e\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{projects}}",
+							"host": [
+								"{{projects}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Project",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"status\":\"COMPLETED\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{projects}}/3ca625d7-cd45-4308-82f0-82617e56a791",
+							"host": [
+								"{{projects}}"
+							],
+							"path": [
+								"3ca625d7-cd45-4308-82f0-82617e56a791"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Project",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{projects}}/357acbe7-801b-40ab-8505-87a5461eb660",
+							"host": [
+								"{{projects}}"
+							],
+							"path": [
+								"357acbe7-801b-40ab-8505-87a5461eb660"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Department",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{projects}}/1/department",
+							"host": [
+								"{{projects}}"
+							],
+							"path": [
+								"1",
+								"department"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Teams",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{projects}}/1/teams",
+							"host": [
+								"{{projects}}"
+							],
+							"path": [
+								"1",
+								"teams"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Tasks",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{projects}}/0fe867da-432c-4d55-8ced-2e82cbdc3f28/tasks",
+							"host": [
+								"{{projects}}"
+							],
+							"path": [
+								"0fe867da-432c-4d55-8ced-2e82cbdc3f28",
+								"tasks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Team",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{projects}}/1/team/1/add",
+							"host": [
+								"{{projects}}"
+							],
+							"path": [
+								"1",
+								"team",
+								"1",
+								"add"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Discard team",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{projects}}/1/team/1/discard",
+							"host": [
+								"{{projects}}"
+							],
+							"path": [
+								"1",
+								"team",
+								"1",
+								"discard"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Tasks",
+			"item": [
+				{
+					"name": "Get Tasks",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJraWQiOiI0YmNlYWYzMi00YTczLTQ2OGItYjY5Zi0wZTA1NmJkZGQzMTQiLCJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJzZWxmIiwic3ViIjoiY25icmtheWRlbWlyQGdtYWlsLmNvbSIsImlhdCI6MTc0MjQwNTQxOSwiYXV0aG9yaXRpZXMiOlsiVEVBTV9NRU1CRVIiXX0.YUXe3qHPZGIeq0ONmLlwdG4BcoL1mmJL6JSJwtihHyhBfWy6lf6miwj79sZGgcarsMmN88y19RkYBafbx7rQFnt0AKvJVPZTRttRmAf9yhcg0bEMR5_0FOhr7cR0WUQJIIVYI_WhrMmYOKjPDv9kzAnhIsAI-EJyNKYEsJyQ_2qu3EIArQ3l5t5xShdzBfWbh3aPJtMG2X3byqNT6O-jPJwyRpVHTNFo6HHK0fKrSpnQCYeMjVPpInD-PuJs8JMHPZB7pY7sz2q7JnnpVEGYf07xHz5IVeKAO9GYg7UL2DJ9jjGOCWqlJyBdznoTeiUCDIDapDqv41PdWAwl1gmLog",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{tasks}}",
+							"host": [
+								"{{tasks}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Task",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{tasks}}/1",
+							"host": [
+								"{{tasks}}"
+							],
+							"path": [
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Task",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJraWQiOiI0YmNlYWYzMi00YTczLTQ2OGItYjY5Zi0wZTA1NmJkZGQzMTQiLCJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJzZWxmIiwic3ViIjoiY25icmtheWRlbWlyQGdtYWlsLmNvbSIsImlhdCI6MTc0MjQwNTQxOSwiYXV0aG9yaXRpZXMiOlsiVEVBTV9NRU1CRVIiXX0.YUXe3qHPZGIeq0ONmLlwdG4BcoL1mmJL6JSJwtihHyhBfWy6lf6miwj79sZGgcarsMmN88y19RkYBafbx7rQFnt0AKvJVPZTRttRmAf9yhcg0bEMR5_0FOhr7cR0WUQJIIVYI_WhrMmYOKjPDv9kzAnhIsAI-EJyNKYEsJyQ_2qu3EIArQ3l5t5xShdzBfWbh3aPJtMG2X3byqNT6O-jPJwyRpVHTNFo6HHK0fKrSpnQCYeMjVPpInD-PuJs8JMHPZB7pY7sz2q7JnnpVEGYf07xHz5IVeKAO9GYg7UL2DJ9jjGOCWqlJyBdznoTeiUCDIDapDqv41PdWAwl1gmLog",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \r\n    \"name\":\"Defect 2\",\r\n    \"description\":\"Solve defect 2\",\r\n    \"priority\":\"CRITICAL\",\r\n    \"progress\": \"IN_ANALYSIS\",\r\n    \"userId\":\"660daa03-6a26-4ca8-a8f8-4dd077f00506\",\r\n    \"projectId\":\"0fe867da-432c-4d55-8ced-2e82cbdc3f28\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{tasks}}",
+							"host": [
+								"{{tasks}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Task",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJraWQiOiI0YmNlYWYzMi00YTczLTQ2OGItYjY5Zi0wZTA1NmJkZGQzMTQiLCJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJzZWxmIiwic3ViIjoiY25icmtheWRlbWlyQGdtYWlsLmNvbSIsImlhdCI6MTc0MjQwNTQxOSwiYXV0aG9yaXRpZXMiOlsiVEVBTV9NRU1CRVIiXX0.YUXe3qHPZGIeq0ONmLlwdG4BcoL1mmJL6JSJwtihHyhBfWy6lf6miwj79sZGgcarsMmN88y19RkYBafbx7rQFnt0AKvJVPZTRttRmAf9yhcg0bEMR5_0FOhr7cR0WUQJIIVYI_WhrMmYOKjPDv9kzAnhIsAI-EJyNKYEsJyQ_2qu3EIArQ3l5t5xShdzBfWbh3aPJtMG2X3byqNT6O-jPJwyRpVHTNFo6HHK0fKrSpnQCYeMjVPpInD-PuJs8JMHPZB7pY7sz2q7JnnpVEGYf07xHz5IVeKAO9GYg7UL2DJ9jjGOCWqlJyBdznoTeiUCDIDapDqv41PdWAwl1gmLog",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"progress\": \"IN_ANALYSIS\",\r\n    \"reason\":\"Because I said so\"\r\n} ",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{tasks}}/2fe4a26d-d9a3-4e47-a03d-d1f325716b4a",
+							"host": [
+								"{{tasks}}"
+							],
+							"path": [
+								"2fe4a26d-d9a3-4e47-a03d-d1f325716b4a"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Task",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{tasks}}/1",
+							"host": [
+								"{{tasks}}"
+							],
+							"path": [
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Assignee",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{tasks}}/1/assignee",
+							"host": [
+								"{{tasks}}"
+							],
+							"path": [
+								"1",
+								"assignee"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Project",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{tasks}}/1/project",
+							"host": [
+								"{{tasks}}"
+							],
+							"path": [
+								"1",
+								"project"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Priority",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "{{tasks}}/1/priority",
+							"host": [
+								"{{tasks}}"
+							],
+							"path": [
+								"1",
+								"priority"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Progress",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJraWQiOiI0YmNlYWYzMi00YTczLTQ2OGItYjY5Zi0wZTA1NmJkZGQzMTQiLCJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJzZWxmIiwic3ViIjoiY25icmtheWRlbWlyQGdtYWlsLmNvbSIsImlhdCI6MTc0MjQwNTQxOSwiYXV0aG9yaXRpZXMiOlsiVEVBTV9NRU1CRVIiXX0.YUXe3qHPZGIeq0ONmLlwdG4BcoL1mmJL6JSJwtihHyhBfWy6lf6miwj79sZGgcarsMmN88y19RkYBafbx7rQFnt0AKvJVPZTRttRmAf9yhcg0bEMR5_0FOhr7cR0WUQJIIVYI_WhrMmYOKjPDv9kzAnhIsAI-EJyNKYEsJyQ_2qu3EIArQ3l5t5xShdzBfWbh3aPJtMG2X3byqNT6O-jPJwyRpVHTNFo6HHK0fKrSpnQCYeMjVPpInD-PuJs8JMHPZB7pY7sz2q7JnnpVEGYf07xHz5IVeKAO9GYg7UL2DJ9jjGOCWqlJyBdznoTeiUCDIDapDqv41PdWAwl1gmLog",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"progress\":\"COMPLETED\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{tasks}}/020a96f6-318e-49fe-82c3-1011bb65c748/progress",
+							"host": [
+								"{{tasks}}"
+							],
+							"path": [
+								"020a96f6-318e-49fe-82c3-1011bb65c748",
+								"progress"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Comments",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{tasks}}/1/comments",
+							"host": [
+								"{{tasks}}"
+							],
+							"path": [
+								"1",
+								"comments"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Attachments",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{tasks}}/1/attachments",
+							"host": [
+								"{{tasks}}"
+							],
+							"path": [
+								"1",
+								"attachments"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Assign to user",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{tasks}}/2fe4a26d-d9a3-4e47-a03d-d1f325716b4a/assign/2fe4a26d-d9a3-4e47-a03d-d1f325716b4a",
+							"host": [
+								"{{tasks}}"
+							],
+							"path": [
+								"2fe4a26d-d9a3-4e47-a03d-d1f325716b4a",
+								"assign",
+								"2fe4a26d-d9a3-4e47-a03d-d1f325716b4a"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Teams",
+			"item": [
+				{
+					"name": "Get Teams",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{teams}}",
+							"host": [
+								"{{teams}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Team",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{teams}}/1",
+							"host": [
+								"{{teams}}"
+							],
+							"path": [
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Team",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{teams}}",
+							"host": [
+								"{{teams}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Team",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "{{teams}}/1",
+							"host": [
+								"{{teams}}"
+							],
+							"path": [
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Teams",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{teams}}/1",
+							"host": [
+								"{{teams}}"
+							],
+							"path": [
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Users",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{teams}}/1/users",
+							"host": [
+								"{{teams}}"
+							],
+							"path": [
+								"1",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Department",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{teams}}/1/department",
+							"host": [
+								"{{teams}}"
+							],
+							"path": [
+								"1",
+								"department"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get project",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{teams}}/1/project",
+							"host": [
+								"{{teams}}"
+							],
+							"path": [
+								"1",
+								"project"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Member",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{teams}}/1/user/1",
+							"host": [
+								"{{teams}}"
+							],
+							"path": [
+								"1",
+								"user",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "Get Users",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{users}}",
+							"host": [
+								"{{users}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get User",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{users}}/1",
+							"host": [
+								"{{users}}"
+							],
+							"path": [
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create User",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \r\n    \"firstName\":\"Admin\",\r\n    \"lastName\": \"Aydemira\",\r\n    \"password\":\"password\",\r\n    \"email\":\"admin@gmail.com\",    \r\n    \"phoneNumber\":\"XCX\",\r\n    \"role\":\"ADMIN\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{users}}",
+							"host": [
+								"{{users}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update User",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "{{users}}/1",
+							"host": [
+								"{{users}}"
+							],
+							"path": [
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete User",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{users}}/1",
+							"host": [
+								"{{users}}"
+							],
+							"path": [
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Tasks",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{users}}/1/tasks",
+							"host": [
+								"{{users}}"
+							],
+							"path": [
+								"1",
+								"tasks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Teams",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{users}}/1/teams",
+							"host": [
+								"{{users}}"
+							],
+							"path": [
+								"1",
+								"teams"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Projects",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{users}}/1/projects",
+							"host": [
+								"{{users}}"
+							],
+							"path": [
+								"1",
+								"projects"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Comments",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{users}}/1/comments",
+							"host": [
+								"{{users}}"
+							],
+							"path": [
+								"1",
+								"comments"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Login",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "password",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "cnbrkaydemir@gmail.com",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\":\"cnbrkaydemir@gmail.com\",\r\n    \"password\":\"password\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base}}/api/login/token",
+					"host": [
+						"{{base}}"
+					],
+					"path": [
+						"api",
+						"login",
+						"token"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base",
+			"value": "http://localhost:8080",
+			"type": "string"
+		},
+		{
+			"key": "attachments",
+			"value": "{{base}}/api/attachment/v1",
+			"type": "default"
+		},
+		{
+			"key": "comments",
+			"value": "{{base}}/api/comment/v1",
+			"type": "string"
+		},
+		{
+			"key": "departments",
+			"value": "{{base}}/api/department/v1",
+			"type": "string"
+		},
+		{
+			"key": "projects",
+			"value": "{{base}}/api/project/v1",
+			"type": "string"
+		},
+		{
+			"key": "teams",
+			"value": "{{base}}/api/team/v1",
+			"type": "string"
+		},
+		{
+			"key": "users",
+			"value": "{{base}}/api/user/v1",
+			"type": "string"
+		},
+		{
+			"key": "tasks",
+			"value": "{{base}}/api/task/v1",
+			"type": "string"
+		}
+	]
+}
