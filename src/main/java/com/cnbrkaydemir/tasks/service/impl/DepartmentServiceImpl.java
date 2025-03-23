@@ -19,6 +19,10 @@ import com.cnbrkaydemir.tasks.repository.TeamRepository;
 import com.cnbrkaydemir.tasks.service.DepartmentService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,6 +31,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@CacheConfig(cacheNames = {"departments"})
 public class DepartmentServiceImpl implements DepartmentService {
 
     private final DepartmentRepository departmentRepository;
@@ -39,6 +44,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     @Transactional(readOnly = true)
+    @Cacheable(key = "#id")
     public DepartmentDto getDepartmentById(UUID id) throws DepartmentNotFoundException {
         Department targetDepartment = departmentRepository.findById(id).orElseThrow(() -> new DepartmentNotFoundException(id));
         return modelMapper.map(targetDepartment, DepartmentDto.class);
@@ -46,6 +52,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     @Transactional(readOnly = true)
+    @Cacheable(cacheNames = "allDepartments")
     public List<DepartmentDto> getAllDepartments() {
         return departmentRepository.findAll()
                 .stream()
@@ -55,6 +62,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
+    @CacheEvict(cacheNames = "allDepartments", allEntries = true)
     public DepartmentDto createDepartment(DepartmentDto departmentDto) {
         Department targetDepartment = modelMapper.map(departmentDto, Department.class);
         targetDepartment.setDeleted(false);
@@ -63,6 +71,10 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
+    @Caching(evict = {
+            @CacheEvict(key = "#id"),
+            @CacheEvict(cacheNames = "allDepartments", allEntries = true)
+    })
     public DepartmentDto updateDepartment(UUID id, DepartmentDto department) throws DepartmentNotFoundException {
         Department oldDepartment = departmentRepository.findById(id).orElseThrow(() -> new DepartmentNotFoundException(id));
         modelMapper.map(department, oldDepartment);
@@ -71,6 +83,13 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
+    @Caching(evict = {
+            @CacheEvict(key = "#id"),
+            @CacheEvict(cacheNames = "allDepartments", allEntries = true),
+            @CacheEvict(cacheNames = "departmentTeams", key = "#id"),
+            @CacheEvict(cacheNames = "departmentProjects", key = "#id"),
+            @CacheEvict(cacheNames = "projectDepartment", allEntries = true)
+    })
     public boolean deleteDepartment(UUID id) throws DepartmentNotFoundException {
         Department targetDepartment = departmentRepository.findById(id).orElseThrow(() -> new DepartmentNotFoundException(id));
         targetDepartment.setDeleted(true);
@@ -80,6 +99,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     @Transactional(readOnly = true)
+    @Cacheable(cacheNames = "departmentTeams", key = "#id")
     public List<TeamDto> getTeamsByDepartment(UUID id) {
         Department department = departmentRepository.findById(id).orElseThrow(() -> new DepartmentNotFoundException(id));
         return departmentRepository.findActiveTeamsByDepartmentId(department.getId())
@@ -90,6 +110,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     @Transactional(readOnly = true)
+    @Cacheable(cacheNames = "departmentProjects", key = "#id")
     public List<ProjectDto> getProjectsByDepartment(UUID id) {
         Department department = departmentRepository.findById(id).orElseThrow(() -> new DepartmentNotFoundException(id));
         return departmentRepository.findActiveProjectsByDepartmentId(department.getId())
@@ -100,6 +121,12 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
+    @Caching(evict = {
+            @CacheEvict(key = "#departmentId"),
+            @CacheEvict(cacheNames = "departmentProjects", key = "#departmentId"),
+            @CacheEvict(cacheNames = "allDepartments", allEntries = true),
+            @CacheEvict(cacheNames = "projectDepartment", key = "#projectId")
+    })
     public ProjectDto addProject(UUID departmentId, UUID projectId) throws DepartmentNotFoundException, ProjectNotFoundException {
         Department department = departmentRepository.findById(departmentId).orElseThrow(() -> new DepartmentNotFoundException(departmentId));
         Project project  = projectRepository.findById(projectId).orElseThrow(() -> new ProjectNotFoundException(projectId));
@@ -115,6 +142,12 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
+    @Caching(evict = {
+            @CacheEvict(key = "#departmentId"),
+            @CacheEvict(cacheNames = "departmentProjects", key = "#departmentId"),
+            @CacheEvict(cacheNames = "allDepartments", allEntries = true),
+            @CacheEvict(cacheNames = "projectDepartment", key = "#projectId")
+    })
     public ProjectDto discardProject(UUID departmentId, UUID projectId) throws DepartmentNotFoundException, ProjectNotFoundException {
         Department department = departmentRepository.findById(departmentId).orElseThrow(() -> new DepartmentNotFoundException(departmentId));
         Project project  = projectRepository.findById(projectId).orElseThrow(() -> new ProjectNotFoundException(projectId));
@@ -130,6 +163,11 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
+    @Caching(evict = {
+            @CacheEvict(key = "#departmentId"),
+            @CacheEvict(cacheNames = "departmentTeams", key = "#departmentId"),
+            @CacheEvict(cacheNames = "allDepartments", allEntries = true)
+    })
     public TeamDto addTeam(UUID departmentId, UUID teamId) throws DepartmentNotFoundException, TeamNotFoundException {
         Department department = departmentRepository.findById(departmentId).orElseThrow(() -> new DepartmentNotFoundException(departmentId));
         Team team = teamRepository.findById(teamId).orElseThrow(() -> new TeamNotFoundException(teamId));
@@ -145,6 +183,11 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
+    @Caching(evict = {
+            @CacheEvict(key = "#departmentId"),
+            @CacheEvict(cacheNames = "departmentTeams", key = "#departmentId"),
+            @CacheEvict(cacheNames = "allDepartments", allEntries = true)
+    })
     public TeamDto discardTeam(UUID departmentId, UUID teamId) throws DepartmentNotFoundException, TeamNotFoundException {
         Department department = departmentRepository.findById(departmentId).orElseThrow(() -> new DepartmentNotFoundException(departmentId));
         Team team = teamRepository.findById(teamId).orElseThrow(() -> new TeamNotFoundException(teamId));
@@ -153,7 +196,8 @@ public class DepartmentServiceImpl implements DepartmentService {
             throw new DepartmentDoesNotContainTeamException(department.getName(), team.getName());
         }
 
-        department.getTeams().add(team);
+        // There's a bug in the original code - this should be remove(), not add()
+        department.getTeams().remove(team);
         departmentRepository.save(department);
         return modelMapper.map(team, TeamDto.class);
     }

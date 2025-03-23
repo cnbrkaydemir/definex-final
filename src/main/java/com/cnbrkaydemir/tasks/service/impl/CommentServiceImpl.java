@@ -14,6 +14,10 @@ import com.cnbrkaydemir.tasks.repository.UsersRepository;
 import com.cnbrkaydemir.tasks.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +26,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@CacheConfig(cacheNames = "comments")
 public class CommentServiceImpl implements CommentService {
 
     private final CommentRepository commentRepository;
@@ -34,8 +39,9 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
+    @CacheEvict(cacheNames = "comments", allEntries = true)
     public CommentDto createComment(CreateCommentDto commentDto) {
-        Users user =  usersRepository.findById(commentDto.getUserId()).orElseThrow(()->new UserNotFoundException(commentDto.getUserId()));
+        Users user = usersRepository.findById(commentDto.getUserId()).orElseThrow(()->new UserNotFoundException(commentDto.getUserId()));
         Task task = taskRepository.findById(commentDto.getTaskId()).orElseThrow(()->new TaskNotFoundException(commentDto.getTaskId()));
         Comment comment = modelMapper.map(commentDto, Comment.class);
         comment.setDeleted(false);
@@ -46,6 +52,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional(readOnly = true)
+    @Cacheable(key = "#id")
     public CommentDto getComment(UUID id) throws CommentNotFoundException {
         Comment comment = commentRepository.findById(id).orElseThrow(()->new CommentNotFoundException(id));
         return modelMapper.map(comment, CommentDto.class);
@@ -53,6 +60,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
+    @CachePut(key = "#id")
     public CommentDto updateComment(UUID id, CommentDto comment) throws CommentNotFoundException {
         Comment oldComment = commentRepository.findById(id).orElseThrow(()->new CommentNotFoundException(id));
         modelMapper.map(comment, oldComment);
@@ -61,6 +69,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
+    @CacheEvict(key = "#id")
     public boolean deleteComment(UUID id) throws CommentNotFoundException {
         Comment comment = commentRepository.findById(id).orElseThrow(()->new CommentNotFoundException(id));
         comment.setDeleted(true);
@@ -70,6 +79,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional(readOnly = true)
+    @Cacheable(cacheNames = "allComments")
     public List<CommentDto> getAllComments() {
         return commentRepository.findAll()
                 .stream()

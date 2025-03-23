@@ -11,6 +11,9 @@ import com.cnbrkaydemir.tasks.service.AttachmentService;
 import com.cnbrkaydemir.tasks.service.FileService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +23,7 @@ import java.util.*;
 
 @Service
 @RequiredArgsConstructor
+@CacheConfig(cacheNames = "attachments")
 public class AttachmentServiceImpl implements AttachmentService {
 
     private final AttachmentRepository attachmentRepository;
@@ -32,6 +36,7 @@ public class AttachmentServiceImpl implements AttachmentService {
 
     @Override
     @Transactional(readOnly = true)
+    @Cacheable(key = "'resource_' + #id")
     public Resource getAttachmentAsResource(UUID id) throws AttachmentNotFoundException {
         Attachment attachment = attachmentRepository.findById(id).orElseThrow(()->new AttachmentNotFoundException(id));
         return fileService.loadAsResource(attachment.getName());
@@ -39,12 +44,14 @@ public class AttachmentServiceImpl implements AttachmentService {
 
     @Override
     @Transactional(readOnly = true)
+    @Cacheable(key = "#id")
     public AttachmentDto getAttachment(UUID id) throws AttachmentNotFoundException {
         return modelMapper.map(attachmentRepository.findById(id), AttachmentDto.class);
     }
 
     @Override
     @Transactional(readOnly = true)
+    @Cacheable(cacheNames = "allAttachmentResources")
     public List<Resource> getAllAttachmentsAsResource() {
         return attachmentRepository.findAll()
                 .stream()
@@ -54,6 +61,7 @@ public class AttachmentServiceImpl implements AttachmentService {
 
     @Override
     @Transactional(readOnly = true)
+    @Cacheable(cacheNames = "allAttachments")
     public List<AttachmentDto> getAllAttachments() {
         return attachmentRepository.findAll()
                 .stream()
@@ -63,6 +71,7 @@ public class AttachmentServiceImpl implements AttachmentService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
+    @CacheEvict(cacheNames = {"attachments", "allAttachments", "allAttachmentResources"}, allEntries = true)
     public boolean deleteAttachment(UUID id) throws AttachmentNotFoundException {
         Attachment attachment = attachmentRepository.findById(id).orElseThrow(()->new AttachmentNotFoundException(id));
         fileService.delete(attachment.getName());
@@ -73,6 +82,7 @@ public class AttachmentServiceImpl implements AttachmentService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
+    @CacheEvict(cacheNames = {"allAttachments", "allAttachmentResources"}, allEntries = true)
     public AttachmentDto createAttachment(UUID taskId, MultipartFile file) {
         Task task = taskRepository.findById(taskId).orElseThrow(()->new TaskNotFoundException(taskId));
 

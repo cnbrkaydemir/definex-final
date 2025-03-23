@@ -9,7 +9,7 @@ import java.util.UUID;
 
 @Data
 @EqualsAndHashCode(callSuper=false)
-public class CommentDto {
+public class CommentDto extends BaseDto{
 
     private UUID id;
 

@@ -6,7 +6,7 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper=false)
-public class UpdateTaskProgressDto {
+public class UpdateTaskProgressDto extends BaseDto{
 
     private TaskProgress progress;
 

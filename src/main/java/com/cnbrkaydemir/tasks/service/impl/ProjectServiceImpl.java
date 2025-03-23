@@ -15,6 +15,10 @@ import com.cnbrkaydemir.tasks.repository.TeamRepository;
 import com.cnbrkaydemir.tasks.service.ProjectService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +27,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@CacheConfig(cacheNames = {"projects"})
 public class ProjectServiceImpl implements ProjectService {
 
     private final ProjectRepository projectRepository;
@@ -35,6 +40,7 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     @Transactional(readOnly = true)
+    @Cacheable(key = "#id")
     public ProjectDto getProject(UUID id) throws ProjectNotFoundException {
         Project project = projectRepository.findById(id).orElseThrow(() -> new ProjectNotFoundException(id));
         return modelMapper.map(project, ProjectDto.class);
@@ -42,6 +48,7 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     @Transactional(readOnly = true)
+    @Cacheable(cacheNames = "allProjects")
     public List<ProjectDto> getProjects() {
         return projectRepository.findAll()
                 .stream()
@@ -51,6 +58,7 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
+    @CacheEvict(cacheNames = "allProjects", allEntries = true)
     public ProjectDto createProject(CreateProjectDto projectDto) {
         Project project = modelMapper.map(projectDto, Project.class);
         Department department = departmentRepository.findById(projectDto.getDepartmentId())
@@ -62,6 +70,14 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
+    @Caching(evict = {
+            @CacheEvict(key = "#id"),
+            @CacheEvict(cacheNames = "allProjects", allEntries = true),
+            @CacheEvict(cacheNames = "projectDepartment", key = "#id"),
+            @CacheEvict(cacheNames = "projectTeams", key = "#id"),
+            @CacheEvict(cacheNames = "projectTasks", key = "#id"),
+            @CacheEvict(cacheNames = "tasksByProject", key = "#id")
+    })
     public boolean deleteProject(UUID id) throws ProjectNotFoundException {
         Project project = projectRepository.findById(id).orElseThrow(() -> new ProjectNotFoundException(id));
         project.setDeleted(true);
@@ -71,6 +87,10 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
+    @Caching(evict = {
+            @CacheEvict(key = "#id"),
+            @CacheEvict(cacheNames = "allProjects", allEntries = true)
+    })
     public ProjectDto updateProject(UUID id, ProjectDto project) throws ProjectNotFoundException {
         Project updatedProject = projectRepository.findById(id).orElseThrow(() -> new ProjectNotFoundException(id));
         modelMapper.map(project, updatedProject);
@@ -79,6 +99,7 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     @Transactional(readOnly = true)
+    @Cacheable(cacheNames = "projectDepartment", key = "#id")
     public DepartmentDto getDepartment(UUID id) throws ProjectNotFoundException {
         Project project = projectRepository.findById(id).orElseThrow(() -> new ProjectNotFoundException(id));
         Department department = projectRepository.findActiveDepartmentByProjectId(project.getId());
@@ -87,6 +108,7 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     @Transactional(readOnly = true)
+    @Cacheable(cacheNames = "projectTeams", key = "#id")
     public List<TeamDto> getTeams(UUID id) throws ProjectNotFoundException {
         Project project = projectRepository.findById(id).orElseThrow(() -> new ProjectNotFoundException(id));
         return projectRepository.findActiveTeamsByProjectId(project.getId())
@@ -97,6 +119,11 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
+    @Caching(evict = {
+            @CacheEvict(key = "#projectId"),
+            @CacheEvict(cacheNames = "projectTeams", key = "#projectId"),
+            @CacheEvict(cacheNames = "allProjects", allEntries = true)
+    })
     public TeamDto addTeam(UUID projectId, UUID teamID) throws ProjectNotFoundException, TeamNotFoundException {
         Project project = projectRepository.findById(projectId).orElseThrow(() -> new ProjectNotFoundException(projectId));
         Team team = teamRepository.findById(teamID).orElseThrow(() -> new TeamNotFoundException(teamID));
@@ -112,6 +139,11 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
+    @Caching(evict = {
+            @CacheEvict(key = "#projectId"),
+            @CacheEvict(cacheNames = "projectTeams", key = "#projectId"),
+            @CacheEvict(cacheNames = "allProjects", allEntries = true)
+    })
     public TeamDto discardTeam(UUID projectId, UUID teamID) throws ProjectNotFoundException, TeamNotFoundException, ProjectDoesNotIncludeTeamException {
         Project project = projectRepository.findById(projectId).orElseThrow(() -> new ProjectNotFoundException(projectId));
         Team team = teamRepository.findById(teamID).orElseThrow(() -> new TeamNotFoundException(teamID));
@@ -126,6 +158,7 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     @Transactional(readOnly = true)
+    @Cacheable(cacheNames = "projectTasks", key = "#id")
     public List<TaskDto> getTasks(UUID id) throws ProjectNotFoundException {
         Project project = projectRepository.findById(id).orElseThrow(() -> new ProjectNotFoundException(id));
         return projectRepository.findActiveTasksByProjectId(project.getId())

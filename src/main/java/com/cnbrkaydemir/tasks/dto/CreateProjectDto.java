@@ -9,7 +9,7 @@ import java.util.UUID;
 
 @Data
 @EqualsAndHashCode(callSuper=false)
-public class CreateProjectDto {
+public class CreateProjectDto extends BaseDto {
     private UUID id;
 
     private String name;

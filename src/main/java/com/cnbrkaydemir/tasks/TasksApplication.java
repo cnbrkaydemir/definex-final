@@ -2,9 +2,11 @@ package com.cnbrkaydemir.tasks;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ComponentScans;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @SpringBootApplication
 @ComponentScans({
@@ -14,6 +16,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 		@ComponentScan("com.cnbrkaydemir.tasks.exception"),
 })
 @EnableJpaRepositories("com.cnbrkaydemir.tasks.repository")
+@EnableTransactionManagement
+@EnableCaching
 public class TasksApplication {
 
 	public static void main(String[] args) {

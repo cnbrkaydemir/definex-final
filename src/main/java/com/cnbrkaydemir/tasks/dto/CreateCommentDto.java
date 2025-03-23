@@ -8,7 +8,7 @@ import java.util.UUID;
 
 @Data
 @EqualsAndHashCode(callSuper=false)
-public class CreateCommentDto {
+public class CreateCommentDto extends BaseDto{
     private UUID id;
 
     private String title;
