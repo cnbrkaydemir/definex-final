@@ -415,7 +415,7 @@ public class DepartmentServiceTest {
 
         assertNotNull(discardTeam);
         assertEquals(teamDto, discardTeam);
-        assertFalse(!department.getTeams().contains(team));
+        assertFalse(department.getTeams().contains(team));
     }
 
     @Test
